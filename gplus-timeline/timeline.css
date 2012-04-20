@@ -1,0 +1,134 @@
+body {background-color:#E7EBF2; font-family: tahoma, verdana, arial, sans-serif; font-size:11pt; color:#000000; padding:0; margin:0;}
+p.smallc {font-size:9pt; text-align:center;}
+p.smalll {font-size:9pt; text-align:left;}
+p.smallr {font-size:9pt; text-align:right;}
+table { border-collapse: collapse; }
+table,tr,td,img { border: 0px; }
+td { padding: 5px; vertical-align: top; }
+
+#profile_info {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 890px;
+  min-width: 890px;
+  width: 890px;
+  padding: 5px;
+  z-index: 10;
+  background-color: white;
+  border: 1px solid #C4CDE0;
+  border-bottom-width: 2px;
+  border-top: 0px;
+}
+
+a {
+  cursor: pointer;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+a.user_name {
+  color: #3B5998;
+  font-weight: bold;
+}
+
+a.post_date {
+  color: gray;
+}
+
+a.profile_name {
+  color: #1C2A47;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+#timeline {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 903px;
+  min-width: 903px;
+  width: 903px;
+}
+
+#timeline_spine {
+  display: block;
+  left: 451px;
+  position: absolute;
+  top: 0;
+  width: 3px;
+  background-color: #C4CDE0;
+  z-index: 0;
+}
+
+.post {
+  background-color: white;
+  display: block;
+  border: 1px solid #C4CDE0;
+  padding: 5px;
+  margin: 5px;
+  max-width: 420px;
+  min-width: 420px;
+  width: 420px;
+  overflow: visible;
+  word-wrap: break-word;
+  z-index: 1;
+}
+
+.post img {
+  max-width: 400px;
+  border: 1px solid black;
+}
+
+.user_info {
+  border-bottom: 1px solid #E5E5E5;
+  width: 400px;
+  max-width: 400px;
+  min-width: 400px;
+  padding: 2px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 5px;
+  margin-top: -15px;
+  font-size: 9pt;
+  z-index: 2;
+}
+
+.user_info img {
+  width: 32px;
+  height: 32px;
+}
+
+.left_side {
+  clear: left;
+  float: left;
+}
+
+.right_side {
+  clear: right;
+  float: right;
+}
+
+.left_pointer {
+  background-image: url("pointer_left.png");
+  background-repeat: no-repeat;
+  height: 15px;
+  position: relative;
+  top: 15px;
+  width: 19px;
+  left: 424px;
+  z-index: 3;
+}
+
+.right_pointer {
+  background-image: url("pointer_right.png");
+  background-repeat: no-repeat;
+  height: 15px;
+  position: relative;
+  top: 15px;
+  width: 19px;
+  left: -24px;
+  z-index: 3;
+}

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+<!-- Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License
+ -->
+
+  <ModulePrefs title="Hangout Photo Share">
+    <Require feature="rpc"/>
+    <Require feature="views"/>
+    <Require feature="locked-domain"/>
+  </ModulePrefs>
+  <Content type="html">
+    <![CDATA[
+    <link rel="stylesheet" type="text/css" href="<YOUR_PATH>photos.css">
+    <base target="_blank">
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="//hangoutsapi.talkgadget.google.com/hangouts/api/hangout.js?v=1.0"></script>
+    <script src="<YOUR_PATH>photos.js"></script>
+    <div id="search_panel">
+      <div id="search">
+        <div id="search_albums">
+          <div id="album_filter"><input type="text" id="filter_text"></div>
+          <div id="albums"></div>
+        </div>
+        <div id="search_photos">Choose an album above.</div>
+      </div>
+      <div id="search_switch">
+        <img id="collapse_search" src="<YOUR_PATH>images/collapse.png" alt="Hide search panel">
+        <img id="expand_search" src="<YOUR_PATH>images/expand.png" alt="Show search panel" style="display: none;" >
+      </div>
+    </div>
+    <div id="contents">
+      <div id="contents_pic"><img src="<YOUR_PATH>images/preview.jpg" class="photo"></div>
+      <div id="contents_nav">
+        <table style="width: 100%">
+          <tr>
+            <td style="width: 50px; padding-left: 5px; text-align: left;"><img id="prev" alt="previous photo" src="<YOUR_PATH>images/prev.png" style="display: none;"></td>
+            <td id="contents_text"></td>
+            <td style="width: 50px; padding-right: 5px; text-align: right;"><img id="next" alt="next photo" src="<YOUR_PATH>images/next.png" style="display: none;"></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    ]]>
+  </Content>
+</Module>

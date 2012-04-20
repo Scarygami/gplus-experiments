@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>G+ Post Analyser</title>
+  <meta charset="UTF-8">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script src="config.js"></script>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script type="text/javascript">
+   /*
+    * Copyright 2011 Gerwin Sturm, FoldedSoft e.U.
+    *
+    * Licensed under the Apache License, Version 2.0 (the "License");
+    * you may not use this file except in compliance with the License.
+    * You may obtain a copy of the License at
+    *
+    *     http://www.apache.org/licenses/LICENSE-2.0
+    *
+    * Unless required by applicable law or agreed to in writing, software
+    * distributed under the License is distributed on an "AS IS" BASIS,
+    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    * See the License for the specific language governing permissions and
+    * limitations under the License.
+    */
+
+    /*global $, API_KEY, range */
+    var
+      post_id,
+      author_id,
+      post_date, last_date, first_date,
+      ids = [],
+      int_total = 0,
+      int_count = 0,
+      C_POSTS = 0,
+      C_PHOTOS = 1,
+      C_COMMENTS = 2,
+      C_PLUSONES = 3,
+      C_RESHARES = 4,
+      C_TOTAL = 0,
+      C_ORG = 1,
+      C_RES = 2,
+      C_TOTAL_PP = 3,
+      C_ORG_PP = 4,
+      C_RES_PP = 5,
+      C_STOP = "xxx",
+      stats,
+      get_stats;
+
+    function print_stats(id) {
+      "use strict";
+      var i, j, k, str_stats;
+      for (i = 0; i <= 1; i++) {
+        if (stats[C_POSTS][C_TOTAL][i] != 0) {
+          stats[C_POSTS][C_TOTAL_PP][i] = 1;
+          stats[C_POSTS][C_ORG_PP][i] = (stats[C_POSTS][C_ORG][i] / stats[C_POSTS][C_TOTAL][i]).toFixed(3);
+          stats[C_POSTS][C_RES_PP][i] = (stats[C_POSTS][C_RES][i] / stats[C_POSTS][C_TOTAL][i]).toFixed(3);
+        }
+        for (j = 1; j <= 4; j++) {
+          for (k = 0; k <= 2; k++) {
+            if (stats[C_POSTS][k][i] != 0) {
+              stats[j][k + 3][i] = (stats[j][k][i] / stats[C_POSTS][k][i]).toFixed(3);
+            }
+          }
+        }
+      }
+      str_stats = "<tr><td>" + int_count + "<\/td>";
+      for (i = 0; i <= 4; i++) {
+        for (j = 0; j <= 5; j++) {
+          for (k = 0; k <= 1; k++) {
+            str_stats += "<td>" + stats[i][j][k] + "<\/td>";
+          }
+        }
+      }
+      str_stats += "<\/tr>";
+      $("#stats").append(str_stats);
+    }
+
+    function get_user_stats(id) {
+      "use strict";
+      var i, j, feed_url, jqxhr;
+      feed_url = "https://www.googleapis.com/plus/v1/people/" + id + "/activities/public?maxResults=100&key=" + API_KEY;
+      if (ids[id] == "") {
+        int_count++;
+        $("#progress").html("<img src=\"spinner.gif\" border=\"0\"> Fetching stats " + int_count + " / " + int_total);
+        stats = [];
+        for (i = 0; i <= 4; i++) {
+          stats[i] = [];
+          for (j = 0; j <= 5; j++) {
+            stats[i][j] = [0, 0];
+            stats[i][j] = [0, 0];
+          }
+        }
+      } else {
+        feed_url += "&pageToken=" + ids[id];
+      }
+
+      jqxhr = $.get(feed_url, function (data) {
+        if (data.items != undefined) {
+          if (data.nextPageToken != undefined) {
+            ids[id] = data.nextPageToken;
+          } else {
+            ids[id] = C_STOP;
+          }
+
+          $.each(data.items, function (i, item) {
+            var this_date, chk_reshare, a, att, j;
+            chk_reshare = (item.object.actor != undefined);
+            this_date = new Date(item.published);
+            if (this_date <= last_date && this_date >= first_date) {
+              j = (this_date <= post_date) ? 0 : 1;
+              stats[C_POSTS][C_TOTAL][j]++;
+              stats[C_POSTS][chk_reshare ? C_RES : C_ORG][j]++;
+              if (item.object.replies != undefined) {
+                stats[C_COMMENTS][C_TOTAL][j] += item.object.replies.totalItems;
+                stats[C_COMMENTS][chk_reshare ? C_RES : C_ORG][j] += item.object.replies.totalItems;
+              }
+              if (item.object.plusoners != undefined) {
+                stats[C_PLUSONES][C_TOTAL][j] += item.object.plusoners.totalItems;
+                stats[C_PLUSONES][chk_reshare ? C_RES : C_ORG][j] += item.object.plusoners.totalItems;
+              }
+              if (item.object.resharers != undefined) {
+                stats[C_RESHARES][C_TOTAL][j] += item.object.resharers.totalItems;
+                stats[C_RESHARES][chk_reshare ? C_RES : C_ORG][j] += item.object.resharers.totalItems;
+              }
+              if (item.object.attachments != undefined) {
+                for (a = 0; a < item.object.attachments.length; a++) {
+                  att = item.object.attachments[a];
+                  if (att.objectType == "photo") {
+                    stats[C_PHOTOS][C_TOTAL][j]++;
+                    stats[C_PHOTOS][chk_reshare ? C_RES : C_ORG][j]++;
+                  }
+                }
+              }
+            }
+            if (this_date < first_date) {
+              ids[id] = C_STOP;
+            }
+          });
+
+        } else {
+          if (data.error != undefined) {
+            $("#errors").append(id + " - API error: " + data.error.message + "<br>");
+          } else {
+            $("#stats").append("<tr><td>" + int_count + "<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><td>0<\/td><\/tr>");
+          }
+          ids[id] = C_STOP;
+        }
+        if (ids[id] == C_STOP) {
+          print_stats(id);
+          setTimeout(function () { get_stats(); }, 500);
+        } else {
+          setTimeout(function () { get_user_stats(id); }, 500);
+        }
+      }, "jsonp");
+      jqxhr.error(function () {
+        ids[id] = C_STOP;
+        $("#errors").append(id + " - GET error<br>");
+        print_stats(id);
+        setTimeout(function () { get_stats(); }, 500);
+      });
+    }
+
+    get_stats = function () {
+      "use strict";
+      var chk_unchecked, id;
+      chk_unchecked = false;
+      for (id in ids) {
+        if (ids.hasOwnProperty(id)) {
+          if (ids[id] != C_STOP) { chk_unchecked = true; }
+        }
+      }
+      if (chk_unchecked) {
+        for (id in ids) {
+          if (ids.hasOwnProperty(id)) {
+            if (ids[id] != C_STOP) {
+              get_user_stats(id);
+              return true;
+            }
+          }
+        }
+      } else {
+        $("#progress").html("");
+      }
+    };
+
+    function get_people(t) {
+      "use strict";
+      var feed_url;
+
+      $("#progress").html("<img src=\"spinner.gif\" border=\"0\"> Fetching people...");
+
+      switch (t) {
+      case 0: feed_url = "https://www.googleapis.com/plus/v1/activities/" + post_id + "/comments?maxResults=100&key=" + API_KEY; break;
+      case 1: feed_url = "https://www.googleapis.com/plus/v1/activities/" + post_id + "/people/plusoners?maxResults=100&key=" + API_KEY; break;
+      case 2: feed_url = "https://www.googleapis.com/plus/v1/activities/" + post_id + "/people/resharers?maxResults=100&key=" + API_KEY; break;
+      }
+
+      $.get(feed_url, function (data) {
+        var id;
+        if (data.items != undefined) {
+          $.each(data.items, function (i, item) {
+            if (t == 0) {
+              id = item.actor.id;
+            } else {
+              id = item.id;
+            }
+            if (ids[id] == undefined) {
+              if (id != author_id) {
+                int_total++;
+                ids[id] = "";
+              }
+            }
+          });
+        }
+        if (t < 2) {
+          setTimeout(function () { get_people(t + 1); }, 500);
+        } else {
+          setTimeout(function () { get_stats(t); }, 500);
+        }
+      }, "jsonp");
+    }
+
+    function analyse_post() {
+      "use strict";
+      var feed_url, jqxhr;
+      $("#post").html("");
+      $("#progress").html("<img src=\"spinner.gif\" border=\"0\"> Fetching post...");
+
+      feed_url = "https://www.googleapis.com/plus/v1/activities/" + post_id + "?key=" + API_KEY;
+
+      jqxhr = $.get(feed_url, function (data) {
+        var post_title, post_link, post_author, post_author_link;
+        if (data.error != undefined) {
+          $("#errors").append("<b>API error:<\/b> " + data.error.message);
+        } else {
+          author_id = data.actor.id;
+          post_author = data.actor.displayName;
+          post_author_link = data.actor.url;
+          post_title = data.title;
+          post_link = data.url;
+          post_date = new Date(data.published);
+          last_date = new Date(post_date.getTime() + range * 86400000);
+          first_date = new Date(post_date.getTime() - range * 86400000);
+          $("#post").append("<a href=\"" + post_author_link + "\">" + post_author + "<\/a> - <a href=\"" + post_link + "\">" + post_date.toUTCString() + "<\/a><br>");
+          $("#post").append(post_title);
+
+          get_people(0);
+        }
+      }, "jsonp");
+      jqxhr.error(function () {
+        $("#progress").html("");
+        $("#errors").append("<b>GET error<\/b>");
+      });
+    }
+
+    $(function () {
+      "use strict";
+      var p, url;
+
+      url = String(window.location);
+      p = url.search(/\?id\=/i);
+      post_id = url.substring(p + 4);
+      analyse_post();
+    });
+
+    //-->
+  </script>
+</head>
+<body>
+  <p class="smallr">Script by <a href="https://plus.google.com/112336147904981294875" rel="author">Gerwin Sturm</a>, <a href="http://www.foldedsoft.at">FoldedSoft e.U.</a></p>
+  <h1>G+ Post Analyser</h1>
+  <div id="progress"></div>
+  <hr>
+  <div id="post"></div>
+  <div id="results">
+    <table id="stats">
+      <tr>
+        <th></th>
+        <th colspan="12">Posts</th>
+        <th colspan="12">Photos</th>
+        <th colspan="12">Comments</th>
+        <th colspan="12">+1</th>
+        <th colspan="12">Reshares</th>
+      </tr>
+      <tr>
+        <th></th>
+        <th colspan="6">Count</th><th colspan="6">pp</th>
+        <th colspan="6">Count</th><th colspan="6">pp</th>
+        <th colspan="6">Count</th><th colspan="6">pp</th>
+        <th colspan="6">Count</th><th colspan="6">pp</th>
+        <th colspan="6">Count</th><th colspan="6">pp</th>
+      </tr>
+      <tr>
+        <th></th>
+        <th colspan="2">Total</th><th colspan="2">Original</th><th colspan="2">Reshared</th><th colspan="2">Total</th><th colspan="2">Original</th><th colspan="2">Reshared</th>
+        <th colspan="2">Total</th><th colspan="2">Original</th><th colspan="2">Reshared</th><th colspan="2">Total</th><th colspan="2">Original</th><th colspan="2">Reshared</th>
+        <th colspan="2">Total</th><th colspan="2">Original</th><th colspan="2">Reshared</th><th colspan="2">Total</th><th colspan="2">Original</th><th colspan="2">Reshared</th>
+        <th colspan="2">Total</th><th colspan="2">Original</th><th colspan="2">Reshared</th><th colspan="2">Total</th><th colspan="2">Original</th><th colspan="2">Reshared</th>
+        <th colspan="2">Total</th><th colspan="2">Original</th><th colspan="2">Reshared</th><th colspan="2">Total</th><th colspan="2">Original</th><th colspan="2">Reshared</th>
+      </tr>
+      <tr>
+        <th>Nr.</th>
+        <th>Before</th><th>After</th><th>Before</th><th>After</th><th>Before</th><th>After</th><th>Before</th><th>After</th><th>Before</th><th>After</th><th>Before</th><th>After</th>
+        <th>Before</th><th>After</th><th>Before</th><th>After</th><th>Before</th><th>After</th><th>Before</th><th>After</th><th>Before</th><th>After</th><th>Before</th><th>After</th>
+        <th>Before</th><th>After</th><th>Before</th><th>After</th><th>Before</th><th>After</th><th>Before</th><th>After</th><th>Before</th><th>After</th><th>Before</th><th>After</th>
+        <th>Before</th><th>After</th><th>Before</th><th>After</th><th>Before</th><th>After</th><th>Before</th><th>After</th><th>Before</th><th>After</th><th>Before</th><th>After</th>
+        <th>Before</th><th>After</th><th>Before</th><th>After</th><th>Before</th><th>After</th><th>Before</th><th>After</th><th>Before</th><th>After</th><th>Before</th><th>After</th>
+      </tr>
+    </table>
+  </div>
+  <div id="errors"></div>
+</body>
+</html>

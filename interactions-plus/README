@@ -1,0 +1,57 @@
+Description:
+------------
+This script will display what people interact with you the most.
+
+Disclaimer:
+------------
+The code is just hacked together quickly and not really optimised or cleaned-up yet.
+
+Please note that running the script with max values will take a while to complete and also need 301 queries of your API quota at worst case.
+
+"Installation":
+---------------
+
+You will need a Google API Key to be able to run this script:
+  Go to https://code.google.com/apis/console/
+  Create a new project.
+  Activate the Google+ API in Services
+  Replace {API_KEY} with your key.
+  
+You will also need to replace {USER_ID} with your Google ID, which is the long number you see in the URL when you visit your profile.
+
+You can make adjustments to the variables as needed.
+
+After those changes you can run the script locally simply by opening the index.html in your browser.
+
+What happens:
+-------------
+
+The script will start by getting 100 (defined in MAX_ACTIVITIES) of your recent public activities.
+It will then for each of these activities retrieve 100 (defined in MAX_COMMENTS/MAX_RESHARES/MAX_PLUSONES) comments/resharers/plusoners and for each of the people that appear start counting the number of activities.
+
+For each person a score is calculated as a weighted sum of comments, reshares and plusones (weights can be defined in SCORE_COMMENTS/SCORE_RESHARES/SCORE_PLUSONES).
+
+Example with standard parameters:
+  3 comments, 2 reshares and 4 +1's of a person will give this person a score of 3*3+2*2+4*1 = 17.
+  The script will display this as "17 / C:3 R:2 P:4"
+  
+Based on this score the people are displayed, the higher the score, the closer they are to you.
+For people with the same score, the ones who interacted more recently will be on top.
+  
+------------
+
+Copyright 2011 Gerwin Sturm, FoldedSoft e.U. / www.foldedsoft.at
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+  

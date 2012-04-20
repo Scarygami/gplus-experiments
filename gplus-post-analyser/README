@@ -1,0 +1,75 @@
+=Description=
+
+This script does two different things to give you an idea of the influence of your Google+ posts.
+
+==index.html==
+
+The *index.html* lists all public Google+ activities which can be reached via the API and present them in a list which is sortable by number of comments/reshares/+1's.
+
+==analyser.html==
+
+The *analyser.html* (which is linked for each post in index.html) tries to evaluate the effects of one of your posts.
+
+It first fetches a bunch of people who interacted with your posts via comments/reshares/+1's.
+
+It then reads the activities of those people around the date of your post, taking posts in a defined range before and after your post.
+
+The following values are listed:
+  * Number of Posts
+  * Number of Photos
+  * Number of comments on the posts
+  * Number of reshares of the posts
+  * Number of +1's for the posts
+
+For each of thes you get:
+  * The total number
+  * A per-post ratio which simply is value diveded by number of posts
+
+The values are further split as follows.
+  * Total - for all posts
+  * Original - posts you have created yourself
+  * Reshares - posts you have reshared from others
+
+And then the value is split according to the date of your post, into activities that happened before you posted and activities that happened afterwards.
+
+
+=Installation & Usage=
+
+First download everything into one local folder.
+
+Then you will need a Google API Key to be able to run this script:
+
+  * Go to https://code.google.com/apis/console/
+  * Create a new project.
+  * Activate the Google+ API in Services
+  * Go to API-Access and copy your API key.
+  * Open config.js and replace {API_KEY} with your key.
+  * In config.js you can also define how many days before and after your post you want to consider for the analyser.
+
+After that you can open index.html in your browser, input your Google+ ID (which is the long number in your profile URL) and fetch your posts.
+
+Each post has a link to the analyser which will open in a new tab.
+
+You can copy the resulting table into a spreadsheet application of your choice for further analysis.
+
+----
+
+Feel free to add me on Google+ and contact me there for questions and comments :)
+
+https://plus.google.com/112336147904981294875
+
+----
+
+Copyright 2011 Gerwin Sturm, FoldedSoft e.U. / www.foldedsoft.at
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

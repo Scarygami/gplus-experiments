@@ -1,0 +1,44 @@
+=Description=
+
+This script while read your public Google+ posts and display them similar to the FB timeline. This was done more as a proof-of-concept than being meant for actual use, but people seemed to like it, so I've uploaded the source here.
+
+You can see a live example here: http://www.allmyplus.com/timeline/
+
+New posts will be loaded when you scroll to the bottom of the page, theoretically allowing access to all public posts you ever made.
+
+=Installation & Usage=
+
+First download everything into one folder, there's a package with everything in [http://code.google.com/p/gplus-timeline/downloads/list Downloads].
+
+Then you will need a Google API Key to be able to run this script:
+
+  * Go to https://code.google.com/apis/console/
+  * Create a new project.
+  * Activate the Google+ API in Services
+  * Go to API-Access and copy your API key.
+  * Edit index.html and replace {YOUR API KEY} with your key.
+  * Also replace {YOUR PROFILE ID} with your Google profile ID (the long number)
+
+After that you can simply open index.html locally in your browser, or upload it to your website if you want other people to see it as well.
+
+----
+
+Feel free to add me on Google+ and contact me there for questions and comments :)
+
+https://plus.google.com/112336147904981294875
+
+----
+
+Copyright 2012 Gerwin Sturm, FoldedSoft e.U. / www.foldedsoft.at
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Interactions+</title>
+  <meta charset="UTF-8">
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js"></script>  
+  <link rel="stylesheet" type="text/css" href="style.css">  
+  
+  <script type="text/javascript">
+  
+  /*
+   * Copyright 2011 Gerwin Sturm
+   *
+   * Licensed under the Apache License, Version 2.0 (the "License");
+   * you may not use this file except in compliance with the License.
+   * You may obtain a copy of the License at
+   *
+   *     http://www.apache.org/licenses/LICENSE-2.0
+   *
+   * Unless required by applicable law or agreed to in writing, software
+   * distributed under the License is distributed on an "AS IS" BASIS,
+   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   * See the License for the specific language governing permissions and
+   * limitations under the License.
+   */
+ 
+    // CHANGE THE FOLLOWING VALUES TO YOUR LIKING
+    
+    var API_KEY = "{API_KEY}";
+    var MY_ID = "{USER_ID}";
+    var SCORE_COMMENTS = 3;
+    var SCORE_RESHARES = 2;
+    var SCORE_PLUSONES = 1;    
+    var MAX_ACTIVITIES = 100; // has to be between 1 and 100
+    var MAX_COMMENTS = 100;   // has to be between 1 and 100
+    var MAX_RESHARES = 100;   // has to be between 1 and 100
+    var MAX_PLUSONES = 100;   // has to be between 1 and 100    
+    
+    // NO CHANGING BEYOND THIS POINT, UNLESS YOU WANT TO ;)
+    
+    var users = [];
+    var activities = [];
+    
+    var my_name = "";
+    var my_pic = "";
+    var my_profile = "";
+
+    $(function() {
+      get_activities(MY_ID);
+    });
+    
+    function get_activities(user_id) {
+      var feed_url = "https://www.googleapis.com/plus/v1/people/" + user_id + "/activities/public?maxResults=" + MAX_ACTIVITIES + "&key=" + API_KEY;
+      var jqxhr = $.get(feed_url, function(data) {
+        if(data.items!=undefined) {
+          $.each(data.items, function(i,item) {
+            activities[item.id] = 0;
+            if(my_name=="") {
+              my_name = item.actor.displayName;
+              if(item.actor.image!=undefined) {
+                my_pic = item.actor.image.url;
+              } else {
+                my_pic = "noimage.png"
+              }
+              my_profile = item.actor.url;
+            }
+          });
+          setTimeout(function(){get_stats(); }, 100);
+        }
+      }, "jsonp");
+      jqxhr.error(function(jqXHR, status, error) {
+        $("#errors").append(status + "<br>");
+      });
+    }
+
+    function get_stats() {
+      var int_unchecked = 0;
+      var int_total = 0;
+      for(id in activities) {
+        if(activities[id]<3) int_unchecked++;
+        int_total++;
+      }
+      int_checked = int_total - int_unchecked;
+      display_stats();
+      if(int_unchecked>0) {
+        $("#progress").html("Checked " + int_checked + " of " + int_total + " activities");
+        for(id in activities) {
+          if(activities[id]<3) {
+            switch(activities[id]) {
+              case 0: get_comments(id); break;
+              case 1: get_plusoners(id); break;
+              case 2: get_resharers(id); break;
+            }
+            return true;
+          }
+        }
+      } else {
+        $("#progress").html("");
+      }
+    }
+    
+    function get_comments(activity_id) {
+      var feed_url = "https://www.googleapis.com/plus/v1/activities/" + activity_id + "/comments?maxResults=" + MAX_COMMENTS + "&key=" + API_KEY;
+      var jqxhr = $.get(feed_url, function(data) {
+        if(data.items!=undefined) {
+          $.each(data.items, function(i,item) {
+            if(item.actor.id!=MY_ID) {
+              if(users[item.actor.id]==undefined) {
+                users[item.actor.id] = [];
+                users[item.actor.id]["displayName"] = item.actor.displayName;
+                users[item.actor.id]["url"] = item.actor.url;
+                if(item.actor.image!=undefined) {
+                  users[item.actor.id]["image"] = item.actor.image.url;
+                } else {
+                  users[item.actor.id]["image"] = "noimage.png";
+                }
+                users[item.actor.id]["score"] = 0;
+                users[item.actor.id][1] = 0;
+                users[item.actor.id][3] = 0;
+                users[item.actor.id][2] = 0;
+              }
+              users[item.actor.id]["score"]+=SCORE_COMMENTS;
+              users[item.actor.id][1]++;
+            }
+          });
+        }
+        activities[activity_id]++;
+        setTimeout(function(){get_stats(); }, 200);
+      }, "jsonp");
+      jqxhr.error(function(jqXHR, status, error) {
+        $("#errors").append(status + "<br>");
+        setTimeout(function(){get_stats(); }, 500);
+      });
+    }    
+    
+    function get_plusoners(activity_id) {
+      var feed_url = "https://www.googleapis.com/plus/v1/activities/" + activity_id + "/people/plusoners?maxResults=" + MAX_PLUSONES + "&key=" + API_KEY;
+      var jqxhr = $.get(feed_url, function(data) {
+        if(data.items!=undefined) {
+          $.each(data.items, function(i,item) {
+            if(item.id!=MY_ID) {
+              if(users[item.id]==undefined) {
+                users[item.id] = [];
+                users[item.id]["displayName"] = item.displayName;
+                users[item.id]["url"] = item.url;
+                if(item.image!=undefined) {
+                  users[item.id]["image"] = item.image.url;
+                } else {
+                  users[item.id]["image"] = "noimage.png";
+                }
+                users[item.id]["score"] = 0;
+                users[item.id][1] = 0;
+                users[item.id][3] = 0;
+                users[item.id][2] = 0;
+              }
+              users[item.id]["score"]+=SCORE_PLUSONES;
+              users[item.id][2]++;
+            }
+          });
+        }
+        activities[activity_id]++;
+        setTimeout(function(){get_stats(); }, 200);
+      }, "jsonp");
+      jqxhr.error(function(jqXHR, status, error) {
+        $("#errors").append(status + "<br>");
+        setTimeout(function(){get_stats(); }, 500);
+      });
+    }
+
+    function get_resharers(activity_id) {
+      var feed_url = "https://www.googleapis.com/plus/v1/activities/" + activity_id + "/people/resharers?maxResults=" + MAX_RESHARES + "&key=" + API_KEY;
+      var jqxhr = $.get(feed_url, function(data) {
+        if(data.items!=undefined) {
+          $.each(data.items, function(i,item) {
+            if(item.id!=MY_ID) {          
+              if(users[item.id]==undefined) {
+                users[item.id] = [];
+                users[item.id]["displayName"] = item.displayName;
+                users[item.id]["url"] = item.url;
+                if(item.image!=undefined) {
+                  users[item.id]["image"] = item.image.url;
+                } else {
+                  users[item.id]["image"] = "noimage.png";
+                }
+                users[item.id]["score"] = 0;
+                users[item.id][1] = 0;
+                users[item.id][3] = 0;
+                users[item.id][2] = 0;
+              }
+              users[item.id]["score"]+=SCORE_RESHARES;
+              users[item.id][3]++;
+            }
+          });
+        }
+        activities[activity_id]++;
+        setTimeout(function(){get_stats(); }, 200);
+      }, "jsonp");
+      jqxhr.error(function(jqXHR, status, error) {
+        $("#errors").append(status + "<br>");
+        setTimeout(function(){get_stats(); }, 500);
+      });
+    }
+
+    function display_stats() {
+      if($("#me").length==0) {
+        $("#results").append("<div id=\"me\" class=\"my_profile\"></div>");
+        var str_tmp = "<a href=\"" + my_profile + "\"><img src=\"" + my_pic + "\" alt=\"" + my_name + "\"></a><br>\n"
+        str_tmp  += my_name;
+        $("#me").html(str_tmp);
+        $("#me").css("left","10px");
+        $("#me").css("top","30px");
+      }
+      
+      var max_score = 0;
+      for(id in users) {
+        if($("#u"+id).length==0) {
+          $("#results").append("<div id=\"u" + id + "\" class=\"profile\"></div>");
+          var str_tmp = "<a href=\"" + users[id]["url"] + "\"><img src=\"" + users[id]["image"] + "\" alt=\"" + users[id]["displayName"] + "\"></a><br>\n"
+          str_tmp += users[id]["displayName"] + "<br>\n";
+          str_tmp += "<span class=\"scores\"></span>";
+          $("#u"+id).html(str_tmp);
+        }
+        var str_scores = users[id]["score"] + " / C:" + users[id][1] + " R:" + users[id][3] + " P:" + users[id][2];
+        if(users[id]["score"]>max_score) max_score = users[id]["score"];
+        $("#u"+id+" > .scores").html(str_scores);
+      }
+
+      var score_count = [];
+      
+      if(max_score>0) {
+        for(id in users) {
+          if(score_count[users[id]["score"]]==undefined) {
+            score_count[users[id]["score"]] = 0;
+          }
+        }
+        for(id in users) {
+          var distance = max_score-users[id]["score"];
+          var offset_left = Math.round(distance*score_count.length*110 / max_score + 250);
+          var offset_top = 30 + score_count[users[id]["score"]]*150;
+          $("#u"+id).css("left",offset_left+"px");
+          $("#u"+id).css("top",offset_top+"px");
+          score_count[users[id]["score"]]++;
+        }
+      }
+    }
+    
+    //-->
+  </script> 
+</head>
+<body> 
+  <div id="progress">Getting activities</div>
+  <div id="results"></div>
+  <div id="errors"></div>
+</body>
+</html> 

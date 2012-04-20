@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>My G+ Timeline</title>
+  <link rel="stylesheet" type="text/css" href="timeline.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script type="text/javascript">
+
+    /*
+     * Copyright 2012 Gerwin Sturm / FoldedSoft e.U. / www.foldedsoft.at
+     *
+     * Licensed under the Apache License, Version 2.0 (the "License");
+     * you may not use this file except in compliance with the License.
+     * You may obtain a copy of the License at
+     *
+     *     http://www.apache.org/licenses/LICENSE-2.0
+     *
+     * Unless required by applicable law or agreed to in writing, software
+     * distributed under the License is distributed on an "AS IS" BASIS,
+     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     * See the License for the specific language governing permissions and
+     * limitations under the License.
+     */
+
+    var API_KEY, USER_ID, page_token, chk_left, chk_loading, no_more_data, chk_author;
+    API_KEY = "{YOUR API KEY}";
+    USER_ID = "{YOUR PROFILE ID};
+    page_token = "";
+    chk_left = true;
+    chk_loading = false;
+    no_more_data = false;
+    chk_author = false;
+
+    Date.prototype.nice_date = function () {
+      "use strict";
+      var y, m, d, h, min, sec;
+      y = this.getFullYear().toString();
+      m = (this.getMonth() + 1).toString();
+      d  = this.getDate().toString();
+      h = this.getHours().toString();
+      min = this.getMinutes().toString();
+      sec = this.getSeconds().toString();
+      return y + "-" + (m[1] ? m : "0" + m[0]) + "-" + (d[1] ? d : "0" + d[0]) + " " + (h[1] ? h : "0" + h[0]) + ":" + (min[1] ? min : "0" + min[0]) + ":" + (sec[1] ? sec : "0" + sec[0]);
+    };
+
+    Date.prototype.nice_short_date = function () {
+      "use strict";
+      var y, m, d;
+      y = this.getFullYear().toString();
+      m = (this.getMonth() + 1).toString();
+      d  = this.getDate().toString();
+      return y + "-" + (m[1] ? m : "0" + m[0]) + "-" + (d[1] ? d : "0" + d[0]);
+    };
+
+    function format_post(item) {
+      "use strict";
+      var str_contents, a, chk_pic, att, att_link, att_preview, att_title, chk_reshare;
+      str_contents = "";
+      chk_reshare = false;
+
+      str_contents += "<div class=\"user_info\">";
+      str_contents += "<table><tr>";
+      str_contents += "<td><img src=\"" + item.actor.image.url + "\"><\/td>";
+      str_contents += "<td><a class=\"user_name\" href=\"" + item.actor.url + "\">" + item.actor.displayName + "<\/a><br>";
+      str_contents += "<a class=\"post_date\" href=\"" + item.url + "\">" + (new Date(item.published)).nice_date() + "<\/a><\/td>";
+      str_contents += "<\/tr><\/table>";
+      str_contents += "<\/div>";
+
+      if (item.object.actor != undefined) {
+        chk_reshare = true;
+        if (item.annotation != undefined && item.annotation != "") {
+          str_contents += item.annotation + "<hr>";
+        }
+        str_contents += " <p class=\"smalll\">Reshared <a href=\"" + item.object.url + "\">post<\/a> by <a href=\"" + item.object.actor.url + "\">" + item.object.actor.displayName + "<\/a><\/p>";
+      }
+      if (item.object.content != "") {
+        str_contents += item.object.content + "<br>";
+      }
+      chk_pic = false;
+
+      if (item.object.attachments != undefined) {
+        for (a = 0; a < item.object.attachments.length; a++) {
+          att = item.object.attachments[a];
+          att_link = "";
+          att_preview = "";
+          att_title = "";
+          if (att.url != undefined) {
+            att_link = att.url;
+          }
+          if (att.image != undefined) {
+            att_preview = att.image.url;
+          }
+          if (att.displayName != undefined) {
+            att_title = att.displayName;
+          }
+          if (att_link == "") {
+            if (att.fullImage != undefined) {
+              att_link = att.fullImage.url;
+            }
+          }
+          if (att_title == "" && att_preview == "") {
+            att_title = att_link;
+          }
+          if (att_link != "") {
+            if (!(att_preview != "" && chk_pic == true)) {
+              str_contents += " <br><br>";
+            }
+            str_contents += " <a href=\"" + att_link + "\">";
+            if (att_preview != "") {
+              chk_pic = true;
+              str_contents += "<img src=\"" + att_preview + "\" alt=\"" + ((att_title != "") ? att_title : "preview") + "\">";
+            } else {
+              str_contents += att_title;
+            }
+            str_contents += "<\/a>";
+          }
+        }
+      }
+
+      return str_contents;
+    }
+
+    function set_author(actor) {
+      "use strict";
+      var actor_pic, actor_name, actor_url;
+      actor_pic = actor.image.url;
+      actor_pic = actor_pic.replace("?sz=50", "?sz=125");
+      actor_name = actor.displayName;
+      actor_url = actor.url;
+
+      $("#profile_info").append("<img src=\"" + actor_pic + "\"> ");
+      $("#profile_info").append(" <a class=\"profile_name\" href=\"" + actor.url + "\">" + actor.displayName + "<\/a>");
+      chk_author = true;
+    }
+
+    function load_data() {
+      "use strict";
+      var feed_url;
+      chk_loading = true;
+      feed_url = "https://www.googleapis.com/plus/v1/people/" + USER_ID + "/activities/public?maxResults=100&key=" + API_KEY;
+      if (page_token != "") {
+        feed_url += "&pageToken=" + page_token;
+      }
+      $.get(feed_url, function (data) {
+        var i, item;
+        if (data.items) {
+          for (i = 0; i < data.items.length; i++) {
+            item = data.items[i];
+            if (!chk_author) {
+              set_author(item.actor);
+            }
+            $("#timeline").append("<div id=\"" + item.id + "\" + class=\"post\"><\/div>");
+            $("#" + item.id).addClass(chk_left ? "left_side" : "right_side");
+            $("#" + item.id).append("<div class=\"" + (chk_left ? "left_pointer" : "right_pointer") + "\" title=\"" + (new Date(item.published)).nice_short_date() + "\"><\/div>");
+            $("#" + item.id).append(format_post(item));
+            chk_left = !chk_left;
+          }
+          $("#timeline").append("<p style=\"clear:both\"><\/p>");
+          $("#timeline_spine").height($("#timeline").height());
+        }
+        if (data.nextPageToken) {
+          page_token = data.nextPageToken;
+          no_more_data = false;
+        } else {
+          no_more_data = true;
+        }
+        chk_loading = false;
+      }, "jsonp");
+    }
+
+    $(function () {
+      "use strict";
+      chk_loading = true;
+      load_data();
+      $(window).scroll(function () {
+        $("#timeline_spine").height($("#timeline").height());
+        if ($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
+          if (!chk_loading && !no_more_data) {
+            load_data();
+          }
+        }
+      });
+    });
+
+  </script>
+</head>
+<body>
+  <div id="profile_info"></div>
+  <div id="timeline">
+    <div id="timeline_spine"></div>
+  </div>
+</body>
+</html>

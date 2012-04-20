@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>G+ Post Analyser</title>
+  <meta charset="UTF-8">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script src="config.js"></script>
+  <script src="sorttable.js"></script>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script type="text/javascript">
+   /*
+    * Copyright 2011 Gerwin Sturm, FoldedSoft e.U.
+    *
+    * Licensed under the Apache License, Version 2.0 (the "License");
+    * you may not use this file except in compliance with the License.
+    * You may obtain a copy of the License at
+    *
+    *     http://www.apache.org/licenses/LICENSE-2.0
+    *
+    * Unless required by applicable law or agreed to in writing, software
+    * distributed under the License is distributed on an "AS IS" BASIS,
+    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    * See the License for the specific language governing permissions and
+    * limitations under the License.
+    */
+
+    /*global $, API_KEY */
+
+    Date.prototype.yyyymmddhhmmss = function () {
+      "use strict";
+      var y, m, d, h, min, sec;
+      y = this.getUTCFullYear().toString();
+      m = (this.getUTCMonth() + 1).toString();
+      d  = this.getUTCDate().toString();
+      h = this.getUTCHours().toString();
+      min = this.getUTCMinutes().toString();
+      sec = this.getUTCSeconds().toString();
+      return y + (m[1] ? m : "0" + m[0]) + (d[1] ? d : "0" + d[0]) + (h[1] ? h : "0" + h[0]) + (min[1] ? min : "0" + min[0]) + (sec[1] ? sec : "0" + sec[0]);
+    };
+
+    function fetch_posts(author_id, next_token) {
+      "use strict";
+      var feed_url;
+
+      feed_url = "https://www.googleapis.com/plus/v1/people/" + author_id + "/activities/public?maxResults=100";
+      if (next_token != "") {
+        feed_url += "&pageToken=" + next_token;
+      }
+      feed_url += "&key=" + API_KEY;
+
+
+      $.get(feed_url, function (data) {
+        if (data.items != undefined) {
+          $.each(data.items, function (i, item) {
+            var str_row, post_date;
+            str_row = "<tr>";
+            str_row += "<td>" + "<a href=\"" + item.actor.url + "\">" + item.actor.displayName + "<\/a>" + "<\/td>";
+            post_date = new Date(item.published);
+            str_row += "<td sorttable_customkey=\"" + post_date.yyyymmddhhmmss() + "\">" + post_date.toUTCString() + "<\/td>";
+            str_row += "<td><a href=\"" + item.url + "\">" + item.title + "<\/a><\/td>";
+            if (item.object.replies != undefined) {
+              str_row += "<td>" + item.object.replies.totalItems + "<\/td>";
+            } else {
+              str_row += "<td>0<\/td>";
+            }
+            if (item.object.plusoners != undefined) {
+              str_row += "<td>" + item.object.plusoners.totalItems + "<\/td>";
+            } else {
+              str_row += "<td>0<\/td>";
+            }
+            if (item.object.resharers != undefined) {
+              str_row += "<td>" + item.object.resharers.totalItems + "<\/td>";
+            } else {
+              str_row += "<td>0<\/td>";
+            }
+
+            str_row += "<td><a href=\"analyser.html?id=" + item.id + "\" target=\"_blank\">Analyse this post<\/a><\/td>";
+
+            $("#posts_table tbody").append(str_row);
+          });
+          if (data.nextPageToken != undefined) {
+            setTimeout(function () { fetch_posts(author_id, data.nextPageToken); }, 500);
+          } else {
+            $("#posts_table").addClass("sortable");
+            $("#progress").html("");
+          }
+        } else {
+          if (data.error != undefined) {
+            $("#posts").append("API error: " + data.error.message);
+          } else {
+            $("#posts").append("No public posts.");
+          }
+          $("#posts_table").addClass("sortable");
+          $("#progress").html("");
+        }
+      }, "jsonp");
+    }
+
+    $(function () {
+      "use strict";
+
+      $("#form_submit").click(function () {
+        var author_id = $.trim($("#user_id").val());
+        if (author_id != "") {
+          $("#posts_table tbody").html("");
+          $("#posts_table").removeClass("sortable");
+          $("#progress").html("<img src=\"spinner.gif\" border=\"0\"> Fetching posts, please wait...");
+          fetch_posts(author_id, "");
+        }
+        return false;
+      });
+
+    });
+
+    //-->
+  </script>
+</head>
+<body>
+  <p class="smallr">Script by <a href="https://plus.google.com/112336147904981294875" rel="author">Gerwin Sturm</a>, <a href="http://www.foldedsoft.at">FoldedSoft e.U.</a></p>
+  <h1>G+ Post Analyser</h1>
+  <div id="form">
+    <form>
+      Google User ID:
+      <input type="text" id="user_id" name="user_id">
+      <input type="submit" id="form_submit" value="Fetch Posts">
+    </form>
+    <div id="progress"></div>
+    <hr>
+  </div>
+  <div id="posts">
+    <table id="posts_table" class="sortable">
+      <thead>
+        <tr><th>Author</th><th>Date</th><th>Title</th><th class="sorttable_numeric">Comments</th><th class="sorttable_numeric">Reshares</th><th class="sorttable_numeric">+1's</th><th></th></tr>
+      </thead>
+      <tbody>
+
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

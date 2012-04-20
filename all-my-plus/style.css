@@ -1,0 +1,226 @@
+body {background-color:#FFFFFF; font-family:sans-serif; font-size:11pt; color:#000000; text-align:justify; padding:0; margin:0;}
+h1 {font-family:sans-serif; font-size:13pt; color:#000000; font-weight:bold;}
+p {text-align:justify;}
+p.smallc {font-size:9pt; text-align:center;}
+p.smalll {font-size:9pt; text-align:left;}
+p.smallr {font-size:9pt; text-align:right;}
+table { border-collapse: collapse; }
+table,tr,td,img { border: 0px; }
+td { padding: 5px; vertical-align: top; }
+td.stats { padding: 2px; border: 1px solid black; text-align: right;}
+td.noborder {border: 0px;text-align: left;}
+
+.header {
+  border-top:1px solid #D2D2D2;
+  border-bottom: 1px solid #D2D2D2;
+  background-color:#F1F1F1; color:#333333;
+  font-weight:bold;
+  padding: 0;
+  width: 100%;
+}
+.header table {width: 100%;}
+.header td {padding: 2px 10px 2px 10px; vertical-align: middle; }
+
+.anchor {
+  position:relative;
+  top: -130px;
+  width: 1px;
+  height: 1px;
+  z-index: -10000;
+}
+
+.profile { display:inline-block; border:1px solid black; padding:2px; margin-bottom:5px; text-align:center; 	min-width: 205px; max-width: 205px; width: 205px;}
+
+table.sortable  { border-collapse: collapse; }
+table.sortable thead {
+    background-color:#EEEEEE;
+    color:#666666;
+    font-weight: bold;
+    cursor: default;
+}
+table.sortable td { vertical-align: top; padding: 5px; border: 1px solid #CCCCCC;}
+table.sortable th { vertical-align: top; padding: 5px; border: 1px solid #CCCCCC;}
+
+table.filter_table { border-collapse: collapse; }
+table.filter_table td { text-align: right; vertical-align: middle; padding: 5px; border: 1px solid #CCCCCC; font-size: 9pt;}
+
+#header {
+  width:100%;
+  padding: 0;
+  margin: 0;
+  position: fixed;
+  top: 0;
+  z-index: 10000;
+  background-color:#FFFFFF;
+}
+
+.ds_header h1 {
+  margin: 0px;
+}
+
+#header1 {
+  min-width: 600px;
+  width:100%;
+  padding: 0;
+  margin: 0;
+  background-color: #2D2D2D;
+  border-bottom: 1px solid #000000;
+  color: #CCCCCC;
+  font-size: 13px;  
+  max-height: 30px;
+  height: 30px;
+  min-height: 30px;
+}
+
+#header1 table {width: 100%;}
+#header1 td {padding: 2px 10px 2px 10px; vertical-align: middle; }
+#header1 a {color: #CCCCCC;}
+
+#header2  {
+  min-width: 600px;
+  width:100%;
+  padding: 0;
+  margin: 0;
+  background-color: #F1F1F1;
+  border-bottom: 1px solid #D2D2D2;
+  border-top: 1px solid #D2D2D2;
+  color: #000000;
+  max-height: 90px;
+}
+
+#header2_info {
+  max-width: 975px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#header2_info table {width: 100%; }
+#header2_info td {padding: 5px; vertical-align: middle; }
+
+#main {
+  padding: 5px;
+  min-width: 600px;
+  max-width: 965px;
+  margin-top: 130px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ds_main {
+  margin-bottom: 75px;
+}
+
+#footer {
+  min-width: 600px;
+  margin-top: 10px;
+  padding: 5px;
+}
+
+.footer_data {
+  border-top:1px solid black;
+}
+
+.footer_ds {
+  border-top: 1px solid #D2D2D2;
+  color:#AAAAAA;
+  font-size:9pt;
+  text-align:right;
+}
+
+.footer_ds  a {
+  color:#AAAAAA;
+}
+
+ul {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.ds_date {
+  list-style-type: none;
+  padding: 2px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #D2D2D2;
+  color:#333333;
+  font-weight:bold;
+}
+
+.ds_assignment {
+  list-style-type: none;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+.ds_assignment_user {
+  list-style-type: none;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+.ds_assignment img {
+  max-height:50px;
+}
+
+#pr_main {
+  float:left;
+  text-align:left;
+  width:645px;
+  min-width:645px;
+  max-width:645px;
+}
+
+#pr_details {
+  float:right;
+  text-align:center;
+  border:1px solid black;
+  padding: 10px;
+  max-width: 280px;
+  max-height: 380px;
+  overflow: auto;
+}
+
+#pr_details img {
+  max-width: 250px;
+  max-height: 300px;
+  border: 0;
+}
+
+#pr_errors {
+  clear:both;
+}
+
+#pr_instructions {
+  clear:both;
+}
+
+#pr_username {
+  font-size:13pt;
+  color:#000000;
+  font-weight:bold;
+}
+
+a.menue  {
+	font-weight:bold;
+	color:#000000;
+	text-decoration:none;
+	border: 2px solid #D2D2D2;
+	text-align:center;
+	padding: 5px 10px 4px 10px;
+	margin: 0px 1px 0px 0px;
+	z-index: 0;
+	display:-moz-inline-stack;
+	display:inline-block;
+	zoom:1;
+	*display:inline;	
+}
+
+a.menue:link {color:#000000;}
+a.menue:visited {color:#000000;}
+a.menue:active {color:#000000;}
+a.menue:hover{background-color:#999999;}
+
+.menue_sel {
+  background-color:#FFFFFF;
+}
+.menue_unsel{
+	background-color:#F1F1F1;
+}

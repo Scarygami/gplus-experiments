@@ -1,0 +1,110 @@
+=Description=
+
+This script will render a simple WebGL room and place an avatar for each participant in the room.
+Participants have the following controls:
+  * W/A/S/D - Move arround
+
+  * Cursor keys - Look around
+
+  * Space - Jump
+
+  * C - Duck
+  
+  * E - Wave / R - Rotate Head / T - Turn around once
+  
+The location/orientation of each participant is synced via the shared state of the hangout, so that everyone can see where the others are.
+There also is some basic collision checking.
+
+There are some flags that you can set for testing:
+  * 3rd person view - Places the camera behind your own avatar.
+  
+  * Smooth transitions - Instead of just setting the position/orientation of the other participants on each update, this will interpolate between the positions.
+  
+  * Debug Mode - This will display the contents of the stared state.
+
+  * No collisions - In case you get stuck with another participant you can use this flag to get free.
+
+  * Fast updates - Currently the API is limited to 1 shared state update/second, using this flag you can try 30 updates/second for a short time until the API cancels the request. When you remove the flag again, the status updates will start working normally again after a short timeout. I'm hoping for the API to allow faster updates at some point so I'm using this flag to see if it's working already :)
+  
+  * Music -  This will start the currently selected song from the list. Music is not yet synced between the participants. So far every participant can choose when to start/stop/change the music. This will be changed in a future release. Also the checkbox and the radio buttons for each song will only be enabled, after the song has been loaded completely.
+
+Check out these Video demos:
+  https://plus.google.com/112336147904981294875/posts/SJ1uBJ28UNy
+
+You can test the app by starting a hangout from here: http://www.allmyplus.com/hangout-disco/
+
+    
+=Installation=
+
+  * Edit hangout-disco.xml and change <YOUR PATH> to where you plan to upload the files.
+  
+  * Upload all the files to <YOUR PATH>
+
+  * Please note that the files need to be publicly accessible.
+
+  * .htaccess makes sure that the json-models and the song files can be accessed via CORS. You can also set the `Access-Control-Allow-Origin *` header in another way depending on your server.
+
+  * Go to https://code.google.com/apis/console/ and create a new project.
+
+  * Activate the "Google+ Hangouts API" in Services.
+
+  * Go to "Hangouts" and put the full URL to <YOUR PATH>/hangout_disco.xml in "Gadget URL"
+
+  * Save and you are ready to "Enter a hangout!" :)
+
+If you want to test this with other people you will have to add them as Team members in the API console, and then send them the URL of the hangout you just started.
+
+You can also test this yourself by joining the same hangout via the URL from another PC.
+
+If you extend this script with any fun or interesting features I'd be happy to hear about them, just contact me via Google+ here https://plus.google.com/112336147904981294875 :)
+
+----
+All songs licensed under CC BY 3.0 (http://creativecommons.org/licenses/by/3.0/)
+
+  Emerge in Love by Alex - http://ccmixter.org/files/AlexBeroza/30239
+
+  Straight to the Light by Alex - http://ccmixter.org/files/AlexBeroza/29630
+
+  Hornet by George Ellinas - http://ccmixter.org/files/George_Ellinas/15924
+
+  Mine + Yours = Ours by George Ellinas - http://ccmixter.org/files/George_Ellinas/28107
+
+
+----
+This script uses the Google+™ Hangouts API. (https://developers.google.com/+/hangouts/)
+
+Google+ is a trademark of Google Inc. Use of this trademark is subject to Google Permissions. (http://www.google.com/permissions/index.html)
+
+I'm not affiliated with, sponsored by, or endorsed by Google Inc. (http://www.google.com/)
+
+----
+Copyright 2011-2012 Gerwin Sturm, FoldedSoft e.U., https://plus.google.com/112336147904981294875, http://www.foldedsoft.at/
+
+Keyboard handler: /scripts/keyboard.js & a lot of suggestions for better code - Copyright 2011 Björn Brauer, https://plus.google.com/109651506622355695262
+
+Android model: /models/*.js - Copyright 2011 Dan Mousavi, https://plus.google.com/107982961914883418552
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+----
+Three.js: /scripts/Three.js
+https://github.com/mrdoob/three.js/
+Copyright (c) 2010-2011 three.js Authors. All rights reserved.
+MIT License, /scripts/Threejs_LICENSE.txt
+
+----
+Beatdetektor: /scripts/beatdetektor.js
+http://sourceforge.net/projects/beatdetektor/
+Copyright 2009 Charles J. Cliffe. All rights reserved.
+GNU Lesser General Public License 3, /scripts/beatdetektor_lgpl-3.0.txt
+
