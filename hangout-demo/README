@@ -1,0 +1,45 @@
+Description
+
+Just a simple base hangout app project that shows two of the main functionalities:
+How to access participants and how to use the shared data.
+To learn more about the Hangouts API please visit https://developers.google.com/+/hangouts/
+
+
+Installation
+
+  * Edit demo.xml and change <YOUR PATH> to where you plan to upload the files.
+
+  * Upload all the files to <YOUR PATH>
+
+  * Please note that the files need to be publicly accessible.
+
+  * Go to https://code.google.com/apis/console/ and create a new project.
+
+  * Activate the "Google+ Hangouts API" in Services.
+
+  * Go to "Hangouts" and put the full URL to <YOUR PATH>demo.xml in "Gadget URL"
+
+  * Save and you are ready to "Enter a hangout!" :)
+
+
+----
+This script uses the Google+™ Hangouts API. (https://developers.google.com/+/hangouts/)
+
+Google+ is a trademark of Google Inc. Use of this trademark is subject to Google Permissions. (http://www.google.com/permissions/index.html)
+
+I'm not affiliated with, sponsored by, or endorsed by Google Inc. (http://www.google.com/)
+
+----
+Copyright 2012 Gerwin Sturm, FoldedSoft e.U., https://plus.google.com/112336147904981294875, http://www.foldedsoft.at/
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
