@@ -8,10 +8,12 @@
     <![CDATA[
       <script src="//talkgadget.google.com/hangouts/api/hangout.js?v=1.0"></script>
       <link rel="stylesheet" href="<YOUR_PATH>/css/demo.css" />
-      <script src="<YOUR_PATH>/scripts/demo.js"></script>
+
       <h1>Hangout Demo</h1>
       <div id="container"></div>
       <button id="clickme">Click Me</button> <span id="count">0</span>
+
+      <script src="<YOUR_PATH>/scripts/demo.js"></script>
     ]]>
   </Content>
 </Module>

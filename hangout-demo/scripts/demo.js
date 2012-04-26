@@ -15,34 +15,36 @@
 
       document.getElementById("clickme").onclick = (this.buttonClick.bind(this));
 
-      gapi.hangout.data.onStateChanged.add(this.onStateChanged.bind(this));
+      gapi.hangout.data.onStateChanged.add(this.displayCount.bind(this));
 
+      this.displayCount();
       this.displayParticipants();
-      this.onStateChanged();
     }
   };
 
   HangoutDemo.prototype.buttonClick = function () {
-    var value = parseInt(gapi.hangout.data.getValue("count") || "0", 10);
-    gapi.hangout.data.setValue("count", (value + 1).toString());
+    var value = gapi.hangout.data.getValue("count") || "0";
+    value = (parseInt(value, 10) + 1).toString();
+    gapi.hangout.data.setValue("count", value);
   };
 
-  HangoutDemo.prototype.onStateChanged = function (event) {
-    document.getElementById("count").innerHTML = gapi.hangout.data.getValue("count") || "0";
+  HangoutDemo.prototype.displayCount = function (event) {
+    var value = gapi.hangout.data.getValue("count") || "0";
+    document.getElementById("count").innerHTML = value;
   };
 
   HangoutDemo.prototype.onParticipantsChanged = function (event) {
+    var div = document.getElementById("container");
+    div.innerHTML = "";
     this.displayParticipants();
   };
 
   HangoutDemo.prototype.displayParticipants = function () {
     var div, participants, ul, li, i, l;
-    div = document.getElementById("container");
-    div.innerHTML = "";
     participants = gapi.hangout.getParticipants();
     ul = document.createElement("ul");
     l = participants.length;
-    for (i = 0; i < participants.length; i++) {
+    for (i = 0; i < l; i++) {
       li = document.createElement("li");
       if (participants[i].person) {
         li.innerHTML = participants[i].person.displayName;
@@ -51,7 +53,8 @@
       }
       ul.appendChild(li);
     }
-    document.getElementById("container").appendChild(ul);
+    div = document.getElementById("container");
+    div.appendChild(ul);
   };
 
   var hangoutDemo = new HangoutDemo();
