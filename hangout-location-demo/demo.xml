@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs title="Hangout Demo">
+    <Require feature="rpc"/>
+    <Require feature="views"/>
+  </ModulePrefs>
+  <Content type="html">
+    <![CDATA[
+      <script src="//talkgadget.google.com/hangouts/_/api/hangout.js?v=1.1"></script>
+      <script src="//www.google.com/jsapi"></script>
+      <link rel="stylesheet" href="<YOUR_PATH>/css/location.css" />
+
+      <h1>Hangout Location</h1>
+      <div id="map"></div>
+      <div id="my_location">
+        <p id="current_location" class="small">Getting latest location, please wait...</p>
+        <button id="share" disabled="disabled">Share my location</button>
+        <button id="unshare" disabled="disabled">Remove my location</button><br>
+        <p class="small">Warning: Sharing your location will let all other (and future) participants of this hangout see your current location at city granularity until you remove it, disable the extension or leave the hangout.</p>
+      </div>
+      <hr>
+      <script src="<YOUR_PATH>/scripts/location.js?v=1.0"></script>
+      <script src="https://apis.google.com/js/client.js?onload=onClientReady"></script>
+    ]]>
+  </Content>
+</Module>
