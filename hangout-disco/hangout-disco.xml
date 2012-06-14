@@ -13,7 +13,7 @@
  * the License.
 -->
 <Module>
-  <ModulePrefs title="Hangout3D" height="400" width="600">
+  <ModulePrefs title="Hangout Disco" height="400" width="600">
     <Require feature="dynamic-height"/>
     <Require feature="rpc"/>
   </ModulePrefs>
@@ -23,7 +23,7 @@
       var HOST = "<YOUR PATH>";
     </script>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script type="text/javascript" src="//hangoutsapi.talkgadget.google.com/hangouts/api/hangout.js?v=1.0"></script>
+    <script type="text/javascript" src="//talkgadget.google.com/hangouts/_/api/hangout.js?v=1.1"></script>
     <script type="text/javascript" src="<YOUR PATH>scripts/Three.js"></script>
     <script type="text/javascript" src="<YOUR PATH>scripts/beatdetektor.js"></script>
     <script type="text/javascript" src="<YOUR PATH>scripts/keyboard.js"></script>

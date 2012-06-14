@@ -9,23 +9,23 @@ Participants have the following controls:
   * Space - Jump
 
   * C - Duck
-  
+
   * E - Wave / R - Rotate Head / T - Turn around once
-  
+
 The location/orientation of each participant is synced via the shared state of the hangout, so that everyone can see where the others are.
 There also is some basic collision checking.
 
 There are some flags that you can set for testing:
   * 3rd person view - Places the camera behind your own avatar.
-  
+
   * Smooth transitions - Instead of just setting the position/orientation of the other participants on each update, this will interpolate between the positions.
-  
+
   * Debug Mode - This will display the contents of the stared state.
 
   * No collisions - In case you get stuck with another participant you can use this flag to get free.
 
   * Fast updates - Currently the API is limited to 1 shared state update/second, using this flag you can try 30 updates/second for a short time until the API cancels the request. When you remove the flag again, the status updates will start working normally again after a short timeout. I'm hoping for the API to allow faster updates at some point so I'm using this flag to see if it's working already :)
-  
+
   * Music -  This will start the currently selected song from the list. Music is not yet synced between the participants. So far every participant can choose when to start/stop/change the music. This will be changed in a future release. Also the checkbox and the radio buttons for each song will only be enabled, after the song has been loaded completely.
 
 Check out these Video demos:
@@ -33,11 +33,11 @@ Check out these Video demos:
 
 You can test the app by starting a hangout from here: http://www.allmyplus.com/hangout-disco/
 
-    
+
 =Installation=
 
   * Edit hangout-disco.xml and change <YOUR PATH> to where you plan to upload the files.
-  
+
   * Upload all the files to <YOUR PATH>
 
   * Please note that the files need to be publicly accessible.
