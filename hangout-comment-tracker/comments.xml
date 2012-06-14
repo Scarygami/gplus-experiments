@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+<!--
+ * Copyright (c) 2011-2012 Gerwin Sturm, FoldedSoft e.U. / www.foldedsoft.at
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License
+ -->
+
+  <ModulePrefs title="Hangout Comment Tracker">
+    <Require feature="rpc"/>
+    <Require feature="views"/>
+    <Require feature="locked-domain"/>
+  </ModulePrefs>
+  <Content type="html">
+    <![CDATA[
+    <base target="_blank">
+    <link rel="stylesheet" type="text/css" href="<YOUR PATH>/comments.css">
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="<YOUR PATH>/jquery.jsonp-2.3.0.min.js"></script>
+    <script src="//talkgadget.google.com/hangouts/_/api/hangout.js?v=1.1"></script>
+    <div id="search">
+      <div id="header">
+        <input id="post_url" name="post_url" style="width: 270px;" placeholder="Google+ Post / YouTube Video / Search term"><br>
+        <button id="add_url">Add URL</button> <span class="settings">Include reshares <input type="checkbox" id="post_reshares"></span><br>
+        <button id="search_gplus">Search Google+</button> <button id="search_twitter">Search Twitter</button>
+      </div>
+
+      <div id="warning" style="display: none;">Not a valid URL... Please try again.</div>
+
+      <div id="searching" style="display: none;"><img src="<YOUR PATH>/images/spinner.gif" alt="searching" style="border: 0;"> Searching...</div>
+
+      <div id="posts"></div>
+    </div>
+
+    <div id="slider">
+      <img class="slideup" src="<YOUR PATH>/images/collapse.png" alt="Show comments" style="display: none;">
+      <img class="slidedown" src="<YOUR PATH>/images/expand.png" alt="Show posts" style="display: none;">
+      <span id="slidertext"></span>
+      <img class="slideup" src="<YOUR PATH>/images/collapse.png" alt="Show comments" style="display: none;">
+      <img class="slidedown" src="<YOUR PATH>/images/expand.png" alt="Show posts" style="display: none;">
+    </div>
+
+    <div id="contents">
+      <div class="settings">Oldest first <input type="checkbox" id="oldest_first"> Use colours <input type="checkbox" id="use_colors" checked="checked"></div>
+      <div id="comments"></div>
+    </div>
+
+    <script src="<YOUR PATH>/comments.js"></script>
+    <script src="//apis.google.com/js/client.js?onload=onClientReady"></script>
+    ]]>
+  </Content>
+</Module>
+

@@ -1,23 +1,27 @@
 =Description=
 
-This Hangout extensions will enable you to keep track comments on one of your posts inside of a hangout, to be able to directly react live when you are hosting a Hangout on Air.
+This Hangout extensions will enable you to keep track of comments on one of your posts inside of a hangout, to be able to directly react live when you are hosting a Hangout on Air.
 
 You can test the extension by starting a hangout from here: http://www.allmyplus.com/hangout-comments-tracker/
 
 
 =Installation=
 
-  * Edit comments.xml and change <YOUR PATH> to where you plan to upload the files.
-
-  * Upload all the files to <YOUR PATH>
-
-  * Please note that the files need to be publicly accessible.
+  * Go to http://code.google.com/apis/youtube/dashboard/ and create a new API key.
+    Edit comments.js and replace <YT-API-KEY> with your API Key.
 
   * Go to https://code.google.com/apis/console/ and create a new project.
+    Activate the "Google+ Hangouts API" in Services.
+    Edit comments.js and replace <API-KEY> with your API Key (found in API Access).
 
-  * Activate the "Google+ Hangouts API" in Services.
+  * Edit comments.xml and change <YOUR PATH> to where you plan to upload the files.
+    Edit comments.js and change <YOUR PATH> to the same path.
+
+  * Upload all the files to <YOUR PATH>
+    Please note that the files need to be publicly accessible.
 
   * Go to "Hangouts" and put the full URL to <YOUR PATH>comments.xml in "Gadget URL"
+    Also change the Application Type to Extension
 
   * Save and you are ready to "Enter a hangout!" :)
 

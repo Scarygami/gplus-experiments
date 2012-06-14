@@ -1,0 +1,47 @@
+body {background-color:#FFFFFF; font-family:sans-serif; font-size:10pt; color:#000000; text-align:left; padding:0; margin:0;}
+h1 {font-size: 12pt; font-weight: bold; text-align: center;}
+div {-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; padding: 5px; margin: 0;}
+a {cursor: pointer; text-decoration: none;}
+a:hover {text-decoration: underline;}
+
+#search {height: 92%; width: 100%; overflow-y: scroll; overflow-x: auto;}
+#header { border-bottom: 1px dotted #CCC; padding: 0 0 5px 0; text-align: center;}
+#posts {padding: 0;}
+#contents {height: 92%; width: 100%; overflow-y: scroll; overflow-x: auto;}
+.settings {color: #999;}
+#comments {padding: 0;}
+
+#slider {
+  height: 8%;
+  width: 100%; min-width: 100%; max-width: 100%;
+  overflow: hidden;
+  padding: 5px;
+  background-color:#CCCCCC;
+  text-align: center;
+  -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;
+  cursor: pointer;
+}
+
+.post { border-bottom: 1px dotted #CCC; vertical-align: top; padding: 12px 20px 7px 47px; word-wrap: break-word;}
+.post_delete {
+  float: right;
+  padding: 0px 1px 1px 1px;
+  margin-right: -23px; margin-top: -7px;
+  color: gray;
+  cursor: pointer;
+}
+
+.comment { border-bottom: 1px dotted #CCC; vertical-align: top; padding: 7px 8px 7px 47px; word-wrap: break-word;}
+.comment_pic, .post_pic {display: block; border: 0; max-width: 32px; max-height: 32px; float: left; margin-left: -40px;}
+.service_pic {display: block; border: 0; max-width: 16px; max-height: 16px; float: left; margin-left: -20px; margin-top: 20px;}
+.comment_time, .post_time {display: block; float: right; color: #999; padding: 0;}
+.comment_text, .post_text {margin-top: 2px; padding: 0;}
+.comment_updated {background-color: yellow; font-weight: bold; color: red;}
+.comment_deleted {text-decoration:line-through;}
+
+.post_time a {color: #999;}
+.comment_time a {color: #999;}
+.comment_updated a {color: red;}
+
+#searching { vertical-align: middle; padding: 7px; color: #999;}
+
