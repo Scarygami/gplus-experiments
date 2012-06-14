@@ -8,26 +8,17 @@ You can test the extension by starting a hangout from here: http://www.allmyplus
 =Installation=
 
   * Go to http://code.google.com/apis/youtube/dashboard/ and create a new API key.
-    Edit comments.js and replace <YT-API-KEY> with your API Key.
+    Edit comments_app.js and replace <YT-API-KEY> with your API Key.
 
   * Go to https://code.google.com/apis/console/ and create a new project.
-    Activate the "Google+ Hangouts API" and "Google+ API" in Services.
-    Edit comments.js and replace <API-KEY> with your API Key (found in API Access).
+    Activate theGoogle+ API" in Services.
+    Edit comments_app.js and replace <API-KEY> with your API Key (found in API Access).
 
-  * Edit comments.xml and change <YOUR PATH> to where you plan to upload the files.
-    Edit comments.js and change <YOUR PATH> to the same path.
-
-  * Upload all the files to <YOUR PATH>
-    Please note that the files need to be publicly accessible.
-
-  * Go to "Hangouts" and put the full URL to <YOUR PATH>comments.xml in "Gadget URL"
-    Also change the Application Type to Extension
-
-  * Save and you are ready to "Enter a hangout!" :)
+  * Upload everything to a web server and open the app.html in a browser.
 
 
 ----
-This script uses the Google+™ Hangouts API. (https://developers.google.com/+/hangouts/)
+This script uses the Google+™ API. (https://developers.google.com/+/)
 
 Google+ is a trademark of Google Inc. Use of this trademark is subject to Google Permissions. (http://www.google.com/permissions/index.html)
 

@@ -1,0 +1,143 @@
+html, body {height: 100%; max-height: 100%; min-height: 100%; overflow: hidden;}
+body {background-color:#FFFFFF; font-family:sans-serif; font-size:11pt; color:#000000; text-align:justify; padding:0; margin:0;}
+div {-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; padding: 0; margin: 0;}
+h1 {font-family:sans-serif; font-size:13pt; color:#000000; font-weight:bold;}
+p {text-align:justify;}
+p.smallc {font-size:9pt; text-align:center;}
+p.smalll {font-size:9pt; text-align:left;}
+p.smallr {font-size:9pt; text-align:right;}
+table { border-collapse: collapse; }
+table,tr,td,img { border: 0px; }
+td { padding: 5px; vertical-align: top; }
+td.stats { padding: 2px; border: 1px solid black; text-align: right;}
+td.noborder {border: 0px;text-align: left;}
+
+
+.header {
+  border-top:1px solid #D2D2D2;
+  border-bottom: 1px solid #D2D2D2;
+  background-color:#F1F1F1; color:#333333;
+  font-weight:bold;
+  padding: 0;
+  width: 100%;
+}
+.header table {width: 100%;}
+.header td {padding: 2px 10px 2px 10px; vertical-align: middle; }
+
+.anchor {
+  position:relative;
+  top: -130px;
+  width: 1px;
+  height: 1px;
+  z-index: -10000;
+}
+
+#header {
+  width:100%;
+  padding: 0;
+  margin: 0;
+  position: fixed;
+  top: 0;
+  z-index: 10000;
+  background-color:#FFFFFF;
+}
+
+#header1 {
+  min-width: 600px;
+  width:100%;
+  padding: 0;
+  margin: 0;
+  background-color: #2D2D2D;
+  border-bottom: 1px solid #000000;
+  color: #CCCCCC;
+  font-size: 13px;  
+  max-height: 30px;
+  height: 30px;
+  min-height: 30px;
+}
+
+#header1 table {width: 100%;}
+#header1 td {padding: 2px 10px 2px 10px; vertical-align: middle; }
+#header1 a {color: #CCCCCC;}
+
+#header2  {
+  min-width: 600px;
+  width:100%;
+  padding: 0;
+  margin: 0;
+  background-color: #F1F1F1;
+  border-bottom: 1px solid #D2D2D2;
+  border-top: 1px solid #D2D2D2;
+  color: #000000;
+  max-height: 90px;
+}
+
+#header2_info {
+  max-width: 975px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#header2_info table {width: 100%; }
+#header2_info td {padding: 5px; vertical-align: middle; }
+
+#main {
+  padding: 0;
+  width: 930px;
+  max-width: 930px;
+  min-width: 930px;
+  padding-top: 105px;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
+  height: 100%;
+}
+
+#contents {
+  height: 100%;
+  width: 100%;
+  max-width: 100%;
+  min-width: 100%;
+  overflow-y: scroll;
+  overflow-x: auto;
+  padding: 5px;
+}
+
+#posts_main, #comments_main, #stats_main {
+  display: inline-block;
+  height: 100%;
+  width: 300px;
+  min-width: 300px;
+  max-width: 300px;
+  padding: 5px;
+  overflow-y: scroll;
+  overflow-x: auto;
+}
+
+#posts, #comments {padding: 0;}
+
+.settings {color: #999;}
+.header_main { border-bottom: 1px dotted #CCC; padding: 0 0 5px 0; text-align: center;}
+.post { border-bottom: 1px dotted #CCC; vertical-align: top; padding: 12px 20px 7px 47px; word-wrap: break-word;}
+.post_delete {
+  float: right;
+  padding: 0px 1px 1px 1px;
+  margin-right: -23px; margin-top: -7px;
+  color: gray;
+  cursor: pointer;
+}
+
+a {cursor: pointer; text-decoration: none;}
+a:hover {text-decoration: underline;}
+
+.comment { border-bottom: 1px dotted #CCC; vertical-align: top; padding: 7px 8px 7px 47px; word-wrap: break-word;}
+.comment_pic, .post_pic {display: block; border: 0; max-width: 32px; max-height: 32px; float: left; margin-left: -40px;}
+.service_pic {display: block; border: 0; max-width: 16px; max-height: 16px; float: left; margin-left: -20px; margin-top: 20px;}
+.comment_time, .post_time {display: block; float: right; color: #999; padding: 0;}
+.comment_text, .post_text {margin-top: 2px; padding: 0;}
+.comment_updated {background-color: yellow; font-weight: bold; color: red;}
+.comment_deleted {text-decoration:line-through;}
+
+.post_time a {color: #999; font-size: 9pt;}
+.comment_time a {color: #999; font-size: 9pt;}
+.comment_updated a {color: red; font-size: 9pt;}
