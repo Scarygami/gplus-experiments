@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UT -8">
+    <title>Hangout Band Stand-alone Demo</title>
+    <link rel="stylesheet" href="css/band.css" />
+  </head>
+  <body>
+    <div id="playground">
+      <div id="header">
+        <h1>Hangout Band Stand-alone Demo</h1>
+      </div>
+      <div id="controls">
+        <div id="button_drums" class="button button_pressed"></div>
+        <div id="drums_loading" class="button_light button_loading"></div>
+        <div id="drums_ready" class="button_light button_green"></div>
+        <div id="button_piano" class="button"></div>
+        <div id="piano_loading" class="button_light button_loading"></div>
+        <div id="piano_ready" class="button_light button_green"></div>
+        <div id="button_guitar" class="button"></div>
+        <div id="guitar_loading" class="button_light button_loading"></div>
+        <div id="guitar_ready" class="button_light button_green"></div>
+        <div id="volume_control">
+          <div id="volume_scale">
+            <div class="volume_label" style="top: 44px; left: 28px">0</div>
+            <div class="volume_label" style="top: 34px; left: 21px">1</div>
+            <div class="volume_label" style="top: 22px; left: 19px">2</div>
+            <div class="volume_label" style="top: 10px; left: 23px">3</div>
+            <div class="volume_label" style="top: 0px; left: 30px">4</div>
+            <div class="volume_label" style="top: -4px; left: 41px">5</div>
+            <div class="volume_label" style="top: -4px; left: 53px">6</div>
+            <div class="volume_label" style="top: 0px; left: 64px">7</div>
+            <div class="volume_label" style="top: 10px; left: 73px">8</div>
+            <div class="volume_label" style="top: 22px; left: 76px">9</div>
+            <div class="volume_label" style="top: 34px; left: 73px">10</div>
+            <div class="volume_label" style="top: 44px; left: 66px">11</div>
+            <div class="volume_label" style="top: 51px; left: 41px">VOL</div>
+          </div>
+          <div id="volume_knob">
+            <div class="knob"></div>
+            <div class="knob_pointer"></div>
+          </div>
+        </div>
+      </div>
+      <div id="drums">
+        <div id="drum_set">
+          <div id="drum_bass" class="drums bass instrument">
+            <div id="bass1" class="drums"></div>
+            <div id="bass2" class="drums snare"></div>
+          </div>
+          <div id="drum_snare1" class="drums snare instrument"></div>
+          <div id="drum_snare2" class="drums snare instrument"></div>
+          <div id="drum_snare3" class="drums snare instrument"></div>
+          <div id="drum_snare4" class="drums snare instrument"></div>
+          <div id="drum_snare5" class="drums snare instrument"></div>
+          <div id="drum_hihat" class="drums hihat instrument">
+            <div id="hihat1" class="drums cymbal"></div>
+            <div id="hihat2" class="drums cymbal"></div>
+          </div>
+          <div id="drum_cymbal1" class="drums cymbal instrument"></div>
+          <div id="drum_cymbal2" class="drums cymbal instrument"></div>
+          <div id="drum_cymbal3" class="drums cymbal instrument"></div>
+          <div id="drum_cymbal4" class="drums cymbal instrument"></div>
+          <div id="drum_cymbal5" class="drums cymbal instrument"></div>
+          <div id="drum_cymbal6" class="drums cymbal instrument"></div>
+        </div>
+        <p class="license">
+          Drum sounds by <a href="http://www.freesound.org/people/pjcohen/packs/2902/" target="_blank">pjcohen</a></p>
+      </div>
+      <div id="piano" style="display: none;">
+        <div id="piano_keyboard">
+          <div id="piano_whites">
+            <div id="piano_c3" class="piano_white instrument"></div><div id="piano_d3" class="piano_white instrument"></div><div id="piano_e3" class="piano_white instrument"></div><div id="piano_f3" class="piano_white instrument"></div><div id="piano_g3" class="piano_white instrument"></div><div id="piano_a3" class="piano_white instrument"></div><div id="piano_b3" class="piano_white instrument"></div><div id="piano_c4" class="piano_white instrument"></div><div id="piano_d4" class="piano_white instrument"></div><div id="piano_e4" class="piano_white instrument"></div><div id="piano_f4" class="piano_white instrument"></div><div id="piano_g4" class="piano_white instrument"></div><div id="piano_a4" class="piano_white instrument"></div><div id="piano_b4" class="piano_white instrument"></div><div id="piano_c5" class="piano_white instrument"></div><div id="piano_d5" class="piano_white instrument"></div><div id="piano_e5" class="piano_white instrument"></div><div id="piano_f5" class="piano_white instrument"></div><div id="piano_g5" class="piano_white instrument"></div><div id="piano_a5" class="piano_white instrument"></div><div id="piano_b5" class="piano_white instrument"></div><div id="piano_c6" class="piano_white instrument"></div>
+          </div>
+          <div id="piano_blacks">
+            <div id="piano_db3" class="piano_black instrument"></div><div id="piano_eb3" class="piano_black instrument"></div><div class="piano_blank"></div><div id="piano_gb3" class="piano_black instrument"></div><div id="piano_ab3" class="piano_black instrument"></div><div id="piano_bb3" class="piano_black instrument"></div><div class="piano_blank"></div><div id="piano_db4" class="piano_black instrument"></div><div id="piano_eb4" class="piano_black instrument"></div><div class="piano_blank"></div><div id="piano_gb4" class="piano_black instrument"></div><div id="piano_ab4" class="piano_black instrument"></div><div id="piano_bb4" class="piano_black instrument"></div><div class="piano_blank"></div><div id="piano_db5" class="piano_black instrument"></div><div id="piano_eb5" class="piano_black instrument"></div><div class="piano_blank"></div><div id="piano_gb5" class="piano_black instrument"></div><div id="piano_ab5" class="piano_black instrument"></div><div id="piano_bb5" class="piano_black instrument"></div>
+          </div>
+        </div>
+        <p class="license">Piano sounds by <a href="http://www.freesound.org/people/jobro/packs/2489/" target="_blank">Jobro</a></p>
+      </div>
+      <div id="guitar" style="display: none;">
+        <div id="guitar_board">
+          <div id="guitar_main"></div>
+          <div id="fret0" class="fret"></div>
+          <div id="fret1" class="fret"></div>
+          <div id="fret2" class="fret"></div>
+          <div id="fret3" class="fret"></div>
+          <div id="fret4" class="fret"></div>
+          <div id="fret5" class="fret"></div>
+          <div id="fret6" class="fret"></div>
+          <div id="fret7" class="fret"></div>
+          <div id="fret8" class="fret"></div>
+          <div id="fret9" class="fret"></div>
+          <div id="fret10" class="fret"></div>
+          <div id="fretmark1" class="fretmark"></div>
+          <div id="fretmark2" class="fretmark"></div>
+          <div id="fretmark3" class="fretmark"></div>
+          <div id="fretmark4" class="fretmark"></div>
+          <div id="strings">
+            <div id="string1" class="string"></div>
+            <div id="string2" class="string"></div>
+            <div id="string3" class="string"></div>
+            <div id="string4" class="string"></div>
+            <div id="string5" class="string"></div>
+            <div id="string6" class="string"></div>
+          </div>
+          <div id="chordmark0" class="chordmark"></div>
+          <div id="chordmark1" class="chordmark"></div>
+          <div id="chordmark2" class="chordmark"></div>
+          <div id="chordmark3" class="chordmark"></div>
+          <div id="chordmark4" class="chordmark"></div>
+          <div id="chordmark5" class="chordmark"></div>
+          <div id="chordmark6" class="chordmark"></div>
+        </div>
+        <div id="guitar_chords">
+          <div id="guitar_c" class="chord instrument">C</div>
+          <div id="guitar_db" class="chord instrument">C#</div>
+          <div id="guitar_d" class="chord instrument">D</div>
+          <div id="guitar_eb" class="chord instrument">Eb</div>
+          <div id="guitar_e" class="chord instrument">E</div>
+          <div id="guitar_f" class="chord instrument">F</div>
+          <div id="guitar_gb" class="chord instrument">F#</div>
+          <div id="guitar_g" class="chord instrument">G</div>
+          <div id="guitar_ab" class="chord instrument">G#</div>
+          <div id="guitar_a" class="chord instrument">A</div>
+          <div id="guitar_bb" class="chord instrument">Bb</div>
+          <div id="guitar_b" class="chord instrument">B</div><br>
+          <div id="guitar_cm" class="chord instrument">Cm</div>
+          <div id="guitar_dbm" class="chord instrument">C#m</div>
+          <div id="guitar_dm" class="chord instrument">Dm</div>
+          <div id="guitar_ebm" class="chord instrument">Ebm</div>
+          <div id="guitar_em" class="chord instrument">Em</div>
+          <div id="guitar_fm" class="chord instrument">Fm</div>
+          <div id="guitar_gbm" class="chord instrument">F#m</div>
+          <div id="guitar_gm" class="chord instrument">Gm</div>
+          <div id="guitar_abm" class="chord instrument">G#m</div>
+          <div id="guitar_am" class="chord instrument">Am</div>
+          <div id="guitar_bbm" class="chord instrument">Bbm</div>
+          <div id="guitar_bm" class="chord instrument">Bm</div>
+        </div>
+        <p class="license">Guitar sounds by <a href="http://www.freesound.org/people/NoiseCollector/packs/3715/" target="_blank">NoiseCollector</a></p>
+      </div>
+      <div id="score">
+        <div id="score_controls">
+          <button id="record">Start recording</button>
+          <button id="clear_score">Clear</button>
+          <div style="float: right" class="license"><a href="https://plus.google.com/105049923321474098577" target="_blank">Hangout Band</a> (c) 2012 <a href="https://plus.google.com/112336147904981294875" target="_blank">Gerwin Sturm</a></div>
+        </div>
+        <div id="score_part_template" class="score_part" style="display: none;">
+          <div class="score_part_guitar"></div>
+          <div class="score_part_gclef">
+            <div class="score_line"></div>
+            <div class="score_line"></div>
+            <div class="score_line"></div>
+            <div class="score_line"></div>
+            <div class="score_line"></div>
+            <div class="gclef"></div>
+          </div>
+          <div class="score_part_fclef">
+            <div class="score_line"></div>
+            <div class="score_line"></div>
+            <div class="score_line"></div>
+            <div class="score_line"></div>
+            <div class="score_line"></div>
+            <div class="fclef"></div>
+          </div>
+          <div class="score_part_drums">
+            <div class="score_line"></div>
+            <div class="score_line"></div>
+            <div class="score_line"></div>
+            <div class="score_line"></div>
+            <div class="score_line"></div>
+            <div class="dclef"></div>
+          </div>
+        </div>
+        <div id="score_part1" class="score_part">
+          <div class="score_part_guitar"></div>
+          <div class="score_part_gclef">
+            <div class="score_line"></div>
+            <div class="score_line"></div>
+            <div class="score_line"></div>
+            <div class="score_line"></div>
+            <div class="score_line"></div>
+            <div class="gclef"></div>
+          </div>
+          <div class="score_part_fclef">
+            <div class="score_line"></div>
+            <div class="score_line"></div>
+            <div class="score_line"></div>
+            <div class="score_line"></div>
+            <div class="score_line"></div>
+            <div class="fclef"></div>
+          </div>
+          <div class="score_part_drums">
+            <div class="score_line"></div>
+            <div class="score_line"></div>
+            <div class="score_line"></div>
+            <div class="score_line"></div>
+            <div class="score_line"></div>
+            <div class="dclef"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="scripts/band.js"></script>
+  </body>
+</html>
