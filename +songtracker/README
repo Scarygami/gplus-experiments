@@ -1,0 +1,64 @@
+Description
+-----------
+This Chrome extension writes songs you are listening to on Google Play Music into your Google+ History.
+
+Disclaimer
+----------
+The Google+ History API is still in developer preview so this extension might stop working without notice.
+
+Requirements/Installation
+-------------------------
+1) Sign-up for the Google+ History developer preview: https://developers.google.com/+/history/preview/
+
+2) OAuth Tokens at Google API Console https://code.google.com/apis/console/
+
+  Create a new project.
+
+  Activate the Google+ API and Google+ History API in Services
+
+  Create OAuth2 Tokens in "API Access"
+
+  Add http://www.google.com/robots.txt as Redirect URI
+
+  Edit tracker_background.js to set <YOUR_CLIENT_ID> and <YOUR_CLIENT_SECRET> accordingly.
+
+3) Server-side script
+  The Google+ API needs public URLs for whatever you want to write to History.
+  Since Google Play Music doesn't offer public URLs for song-info I created a small php script.
+  This script takes the song info as parameters and creates the necessary page with schema.org markup.
+  You can host the script on your own server if you want (replacing the URL in tracker_background.js)
+  or use the script that I hosted if you want (URL might change).
+
+4) Once everything is set-up you can load the extension as unpacked extension in Chrome.
+  Enable Developer at mode chrome://chrome/extensions/
+  "Load unpacked extension" and point it to extension folder.
+
+
+Usage
+-----
+You will get a new icon in your browser bar.
+Clicking it will show a pop-up which at first will only show "Authorize"
+Clicking the first time will redirect you through the Google OAuth flow where you have to give permission to the extension.
+Once authorized (you might have to click Authorize twice on first use) you can click on "Start tracking"
+While playing music on Google Play Music https://play.google.com/music/ the song information will be send to your Google+ History at https://plus.google.com/history
+
+------------
+
+Copyright 2012 Gerwin Sturm, FoldedSoft e.U. / foldedsoft.at, scarygami.net/+
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+------------
+
+Included is the OAuth2 for Chrome Extensions library by Boris Smus
+https://github.com/borismus/oauth2-extensions/

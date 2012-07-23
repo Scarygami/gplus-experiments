@@ -1,0 +1,38 @@
+{
+  "manifest_version": 2,
+  "name": "+Songtracker",
+  "version": "1.0.0",
+  "description": "Keeping track of what you listen on Google Music",
+  "permissions": [
+    "notifications",
+    "https://accounts.google.com/o/oauth2/token",
+    "https://www.googleapis.com/"
+  ],
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "content_security_policy": "script-src 'self' https://apis.google.com; object-src 'self'",
+  "content_scripts": [
+    {
+      "matches": ["https://play.google.com/music/*"],
+      "js": ["tracker_content.js"]
+    },
+    {
+      "matches": ["http://www.google.com/robots.txt*"],
+      "js": ["oauth2/oauth2_inject.js"],
+        "run_at": "document_start"
+    }
+  ],
+  "background": {
+    "page": "tracker_background.html"
+  },
+  "browser_action": {
+    "default_icon": "icon19.png",
+    "default_popup": "tracker_popup.html"
+  },
+  "web_accessible_resources": [
+    "icon48.png"
+  ]
+}
