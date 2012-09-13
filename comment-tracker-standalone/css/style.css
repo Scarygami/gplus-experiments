@@ -5,7 +5,7 @@ h1 {font-family:sans-serif; font-size:13pt; color:#000000; font-weight:bold;}
 p {text-align:justify;}
 p.smallc {font-size:9pt; text-align:center;}
 p.smalll {font-size:9pt; text-align:left;}
-p.smallr {font-size:9pt; text-align:right;}
+p.smallr {font-size:9pt; text-align:right; margin: 0px;}
 table { border-collapse: collapse; }
 table,tr,td,img { border: 0px; }
 td { padding: 5px; vertical-align: top; }
@@ -83,8 +83,7 @@ td.noborder {border: 0px;text-align: left;}
 
 #main {
   padding: 0;
-  width: 930px;
-  max-width: 930px;
+  width: 90%;
   min-width: 930px;
   padding-top: 105px;
   margin-left: auto;
@@ -103,34 +102,53 @@ td.noborder {border: 0px;text-align: left;}
   padding: 5px;
 }
 
-#posts_main, #comments_main, #stats_main {
+#posts_main, #comments_main {
   display: inline-block;
   height: 100%;
-  width: 300px;
-  min-width: 300px;
-  max-width: 300px;
+  width: 30%;
+  min-width: 30%;
+  max-width: 30%;
   padding: 5px;
   overflow-y: scroll;
   overflow-x: auto;
 }
 
-#posts, #comments {padding: 0;}
-
-.settings {color: #999;}
-.header_main { border-bottom: 1px dotted #CCC; padding: 0 0 5px 0; text-align: center;}
-.post { border-bottom: 1px dotted #CCC; vertical-align: top; padding: 12px 20px 7px 47px; word-wrap: break-word;}
-.post_delete {
-  float: right;
-  padding: 0px 1px 1px 1px;
-  margin-right: -23px; margin-top: -7px;
-  color: gray;
-  cursor: pointer;
+#watch_main {
+  display: inline-block;
+  height: 100%;
+  width: 30%;
+  min-width: 30%;
+  max-width: 30%;
+  padding: 5px;
+  overflow-y: auto;
+  overflow-x: auto;
+  vertical-align: top;
 }
+
+#posts, #comments, #comments_pinned, #comments_unpinned {padding: 0;}
+
+.settings {color: #999; font-size: 10pt;}
+.header_main { border-bottom: 1px dotted #CCC; padding: 0 0 5px 0; text-align: center;}
+.post { border-bottom: 1px dotted #CCC; vertical-align: top; padding: 12px 8px 7px 47px; word-wrap: break-word; position: relative;}
 
 a {cursor: pointer; text-decoration: none;}
 a:hover {text-decoration: underline;}
 
-.comment { border-bottom: 1px dotted #CCC; vertical-align: top; padding: 7px 8px 7px 47px; word-wrap: break-word;}
+.comment { border-bottom: 1px dotted #CCC; vertical-align: top; padding: 7px 8px 7px 47px; word-wrap: break-word; position: relative;}
+.actions { display: none; position: absolute; bottom: 2px; right: 2px; padding: 2px; background-color: rgba(255, 255, 255, 0.8); }
+.action { display: inline-block; margin: 0px 2px 0px 2px; background-image: url(https://www.foldedsoft.at/plus/hangout-comment-tracker/images/icons.png?2); cursor: pointer;}
+.action_hide { width: 20px; height: 20px; background-position: 0px 0px; }
+.action_unhide { width: 20px; height: 20px; background-position: -20px 0px; }
+.action_pin { width: 20px; height: 20px; background-position: -39px 0px; }
+.action_unpin { width: 16px; height: 20px; background-position: -59px 0px; }
+.action_track { width: 20px; height: 20px; background-position: -75px 0px; }
+.action_reshares { width: 25px; height: 20px; background-position: -96px 0px; }
+.action_watch { width: 20px; height: 20px; background-position: -122px 0px; }
+.action_unwatch { width: 20px; height: 20px; background-position: -143px 0px; }
+.important { border: 1px solid black; margin-bottom: 2px;}
+.hidden { text-decoration: line-through; }
+.comment:hover .actions { display: block; }
+.post:hover .actions { display: block; }
 .comment_pic, .post_pic {display: block; border: 0; max-width: 32px; max-height: 32px; float: left; margin-left: -40px;}
 .service_pic {display: block; border: 0; max-width: 16px; max-height: 16px; float: left; margin-left: -20px; margin-top: 20px;}
 .comment_time, .post_time {display: block; float: right; color: #999; padding: 0;}

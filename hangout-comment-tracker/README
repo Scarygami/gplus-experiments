@@ -2,7 +2,7 @@
 
 This Hangout extensions will enable you to keep track of comments on one of your posts inside of a hangout, to be able to directly react live when you are hosting a Hangout on Air.
 
-You can test the extension by starting a hangout from here: http://www.allmyplus.com/hangout-comments-tracker/
+You can test the extension by starting a hangout from here: http://www.allmyplus.com/hangout-comment-tracker/
 
 
 =Installation=
@@ -16,6 +16,7 @@ You can test the extension by starting a hangout from here: http://www.allmyplus
 
   * Edit comments.xml and change <YOUR PATH> to where you plan to upload the files.
     Edit comments.js and change <YOUR PATH> to the same path.
+    Note: The Tracker-URL will only work if you also setup and uploaded the comment-tracker-standalone version.
 
   * Upload all the files to <YOUR PATH>
     Please note that the files need to be publicly accessible.

@@ -3,27 +3,35 @@
   <head>
     <meta charset="UTF-8">
     <title>Comment Tracker - Stand-alone App</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <base target="_blank">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="icon" href="../favicon.ico">
+    <link href="https://plus.google.com/105696887942257432718" rel="publisher">
+    <link href="https://plus.google.com/112986009215783461617" rel="publisher">
     <script src="https://apis.google.com/js/plusone.js"></script>
-    <script src="comments_app.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="jquery.jsonp-2.3.0.min.js"></script>
-    <script src="https://apis.google.com/js/client.js?onload=onClientReady"></script>
+    <script src="scripts/jquery.jsonp-2.3.0.min.js"></script>
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-16652516-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function () {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      }());
+    </script>
   </head>
   <body>
     <div id="header">
-      <div id="header1">
-        <table><tr>
-          <td style="height: 25px; text-align:right;">
-            <a href="http://www.allmyplus.com/hangout-comment-tracker/">Hangout Comment Tracker</a> developed by <a href="https://plus.google.com/112336147904981294875">Gerwin Sturm</a>, <a href="http://www.foldedsoft.at/">FoldedSoft e.U.</a>
-          </td>
-        </tr></table>
-      </div>
+      <div id="header1"></div>
       <div id="header2">
         <div id="header2_info" style="width:965px; max-width:965px; min-width:965px;">
           <table>
             <tr>
-              <td style="width:80px;"><img src="images/comments.png" alt="Comment Tracker" style="border: 0px;"></td>
+              <td style="width:80px;"><img src="/images/comments.png" alt="Hangout Comment Tracker" style="border: 0px;"></td>
               <td><h1>Comment Tracker - Stand-alone App</h1></td>
               <td style="width:220px; text-align:right;"><div class="g-plusone" data-annotation="inline" data-width="200"></div></td>
             </tr>
@@ -36,8 +44,8 @@
         <div class="header_main">
           <h1>Posts / Searches</h1>
           <input id="post_url" name="post_url" style="width: 270px;" placeholder="Google+ Post / YouTube Video / Search term"><br>
-          <button id="add_url">Add URL</button> <span class="settings">Include reshares <input type="checkbox" id="post_reshares"></span><br>
-          <button id="search_gplus">Search Google+</button> <button id="search_twitter">Search Twitter</button>
+          <button id="add_url">Add URL</button> <button id="search_gplus">Search G+</button> <button id="search_twitter">Search Twitter</button>
+          <p class="smallr"><a href="http://www.allmyplus.com/hangout-comment-tracker/app.html" id="tracking_url">Tracking URL</a></p>
         </div>
         <div id="warning" style="display: none;">Not a valid URL... Please try again.</div>
         <div id="searching" style="display: none;"><img src="images/spinner.gif" alt="searching" style="border: 0;"> Searching...</div>
@@ -45,15 +53,23 @@
       </div>
       <div id="comments_main">
         <div class="header_main">
-          <h1>Comments</h1>          <div class="settings">Oldest first <input type="checkbox" id="oldest_first"> Use colours <input type="checkbox" id="use_colors" checked="checked"></div>
+          <h1>Comments / Search results</h1>
+          <div class="settings">
+            Show hidden <input type="checkbox" id="show_hidden">
+            Oldest first <input type="checkbox" id="oldest_first">
+            Colours <input type="checkbox" id="use_colors" checked="checked">
+          </div>
         </div>
-        <div id="comments"></div>
+        <div id="comments">
+          <div id="comments_pinned"></div>
+          <div id="comments_unpinned"></div>
+        </div>
       </div>
-      <div id="stats_main" style="display: none;">
-        <div class="header_main">
-          <h1>Statistics</h1>
-        </div>
+      <div id="watch_main">
+        <div id="yt_stream"></div>
       </div>
     </div>
+    <script src="scripts/comments_app.js"></script>
+    <script src="https://apis.google.com/js/client.js?onload=onClientReady"></script>
   </body>
 </html>

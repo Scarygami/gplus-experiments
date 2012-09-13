@@ -24,38 +24,50 @@
   <Content type="html">
     <![CDATA[
     <base target="_blank">
-    <link rel="stylesheet" type="text/css" href="<YOUR PATH>/comments.css">
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script type="text/javascript" src="<YOUR PATH>/jquery.jsonp-2.3.0.min.js"></script>
-    <script src="//talkgadget.google.com/hangouts/_/api/hangout.js?v=1.1"></script>
-    <div id="search">
+    <link rel="stylesheet" type="text/css" href="<YOUR PATH>css/comments.css">
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script type="text/javascript" src="<YOUR PATH>scripts/jquery.jsonp-2.3.0.min.js"></script>
+    <script src="//talkgadget.google.com/hangouts/_/api/hangout.js?v=1.2"></script>
+    <div id="menu">
+      <a href="#" target="_self" class="menu" id="sources_menu">Sources</a>
+      <a href="#" target="_self" class="menu" id="stream_menu">Stream</a>
+      <a href="#" target="_self" class="menu" id="share_menu">Shared</a>
+    </div>
+    <div id="sources" class="tab">
       <div id="header">
         <input id="post_url" name="post_url" style="width: 270px;" placeholder="Google+ Post / YouTube Video / Search term"><br>
-        <button id="add_url">Add URL</button> <span class="settings">Include reshares <input type="checkbox" id="post_reshares"></span><br>
-        <button id="search_gplus">Search Google+</button> <button id="search_twitter">Search Twitter</button>
+        <button id="add_url">Add URL</button> <button id="search_gplus">Search G+</button> <button id="search_twitter">Search Twitter</button>
+        <p class="smallr"><a href="http://www.allmyplus.com/hangout-comment-tracker/app.html" id="tracking_url">Stand-alone Tracker</a></p>
       </div>
 
       <div id="warning" style="display: none;">Not a valid URL... Please try again.</div>
 
-      <div id="searching" style="display: none;"><img src="<YOUR PATH>/images/spinner.gif" alt="searching" style="border: 0;"> Searching...</div>
+      <div id="searching" style="display: none;"><img src="<YOUR PATH>images/spinner.gif" alt="searching" style="border: 0;"> Searching...</div>
 
       <div id="posts"></div>
     </div>
 
-    <div id="slider">
-      <img class="slideup" src="<YOUR PATH>/images/collapse.png" alt="Show comments" style="display: none;">
-      <img class="slidedown" src="<YOUR PATH>/images/expand.png" alt="Show posts" style="display: none;">
-      <span id="slidertext"></span>
-      <img class="slideup" src="<YOUR PATH>/images/collapse.png" alt="Show comments" style="display: none;">
-      <img class="slidedown" src="<YOUR PATH>/images/expand.png" alt="Show posts" style="display: none;">
+    <div id="stream" class="tab">
+      <div class="settings">
+        Show hidden <input type="checkbox" id="show_hidden">
+        Oldest first <input type="checkbox" id="oldest_first">
+        Colours <input type="checkbox" id="use_colors" checked="checked">
+      </div>
+      <div id="comments">
+        <div id="comments_pinned"></div>
+        <div id="comments_unpinned"></div>
+      </div>
     </div>
 
-    <div id="contents">
-      <div class="settings">Oldest first <input type="checkbox" id="oldest_first"> Use colours <input type="checkbox" id="use_colors" checked="checked"></div>
-      <div id="comments"></div>
+    <div id="share" class="tab">
+      <div class="settings">
+        <button id="share_sources">Share Sources</button> <button id="add_all">Add All</button> Show hidden <input type="checkbox" id="show_hidden_shares">
+        <div id="shares_added" style="display: none;">Your sources have been added</div>
+      </div>
+      <div id="shared"></div>
     </div>
 
-    <script src="<YOUR PATH>/comments.js"></script>
+    <script src="<YOUR PATH>scripts/comments.js"></script>
     <script src="//apis.google.com/js/client.js?onload=onClientReady"></script>
     ]]>
   </Content>
