@@ -267,6 +267,7 @@ class OutputOutputMulti extends apiModel {
 class Training extends apiModel {
   public $kind;
   public $storageDataLocation;
+  public $storagePMMLModelLocation;
   protected $__dataAnalysisType = 'TrainingDataAnalysis';
   protected $__dataAnalysisDataType = '';
   public $dataAnalysis;
@@ -289,6 +290,12 @@ class Training extends apiModel {
   }
   public function getStorageDataLocation() {
     return $this->storageDataLocation;
+  }
+  public function setStoragePMMLModelLocation($storagePMMLModelLocation) {
+    $this->storagePMMLModelLocation = $storagePMMLModelLocation;
+  }
+  public function getStoragePMMLModelLocation() {
+    return $this->storagePMMLModelLocation;
   }
   public function setDataAnalysis(TrainingDataAnalysis $dataAnalysis) {
     $this->dataAnalysis = $dataAnalysis;

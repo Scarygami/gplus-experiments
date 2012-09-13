@@ -884,18 +884,27 @@ class apiModeratorService extends apiService {
   public $tags;
   public $series;
   public $series_submissions;
+  public $series_submissions_submissions;
+  public $series_submissions_responses;
   public $series_responses;
+  public $series_responses_submissions;
+  public $series_responses_responses;
   public $topics;
   public $topics_submissions;
+  public $topics_submissions_submissions;
   public $global;
   public $global_series;
+  public $global_series_series;
   public $profiles;
   public $featured;
   public $featured_series;
+  public $featured_series_series;
   public $myrecent;
   public $myrecent_series;
+  public $myrecent_series_series;
   public $my;
   public $my_series;
+  public $my_series_series;
   public $submissions;
   /**
    * Constructs the internal representation of the Moderator service.

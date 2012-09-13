@@ -17,11 +17,15 @@
 
 // Check for the required json and curl extensions, the Google API PHP Client won't function without them.
 if (! function_exists('curl_init')) {
-  throw new Exception('The Google PHP API Client requires the CURL PHP extension');
+  throw new Exception('Google PHP API Client requires the CURL PHP extension');
 }
 
 if (! function_exists('json_decode')) {
-  throw new Exception('The Google PHP API Client requires the JSON PHP extension');
+  throw new Exception('Google PHP API Client requires the JSON PHP extension');
+}
+
+if (! function_exists('http_build_query')) {
+  throw new Exception('Google PHP API Client requires http_build_query()');
 }
 
 if (! ini_get('date.timezone') && function_exists('date_default_timezone_set')) {
@@ -41,10 +45,13 @@ if (file_exists($cwd . '/local_config.php')) {
 }
 
 // Include the top level classes, they each include their own dependencies
+require_once 'service/apiModel.php';
+require_once 'service/apiService.php';
+require_once 'service/apiServiceRequest.php';
 require_once 'auth/apiAuth.php';
 require_once 'cache/apiCache.php';
 require_once 'io/apiIO.php';
-require_once 'service/apiService.php';
+require_once('service/apiMediaFileUpload.php');
 
 /**
  * The Google API Client
@@ -283,6 +290,18 @@ class apiClient {
    */
   public function revokeToken($token = null) {
     self::$auth->revokeToken($token);
+  }
+
+  /**
+   * Verify an id_token. This method will verify the current id_token, if one
+   * isn't provided.
+   * @throws apiAuthException
+   * @param string|null $token The token (id_token) that should be verified.
+   * @return apiLoginTicket Returns an apiLoginTicket if the verification was
+   * successful.
+   */
+  public function verifyIdToken($token = null) {
+    return self::$auth->verifyIdToken($token);
   }
 
   /**

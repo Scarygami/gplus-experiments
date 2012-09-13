@@ -34,6 +34,7 @@ class apiServiceRequest {
   public $parameters;
   public $postBody;
   public $batchKey;
+  public $contentType;
 
   /**
    * @param string $restBasePath
@@ -128,4 +129,7 @@ class apiServiceRequest {
     $this->batchKey = $batchKey;
   }
 
+  public function setContentType($type) {
+    $this->contentType = $type;
+  }
 }

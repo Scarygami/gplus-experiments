@@ -36,8 +36,8 @@ class apiRPC {
       );
     }
     $httpRequest = new apiHttpRequest($request->getRpcPath());
-    $httpRequest->setHeaders(array('Content-Type: application/json'));
-    $httpRequest->setMethod('POST');
+    $httpRequest->setRequestHeaders(array('Content-Type' => 'application/json'));
+    $httpRequest->setRequestMethod('POST');
     $httpRequest->setPostBody(json_encode($jsonRpcRequest));
     $httpRequest = apiClient::$io->authenticatedRequest($httpRequest);
     if (($decodedResponse = json_decode($httpRequest->getResponseBody(), true)) != false) {

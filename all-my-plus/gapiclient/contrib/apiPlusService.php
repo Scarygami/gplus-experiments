@@ -430,12 +430,20 @@ class Activity extends apiModel {
 }
 
 class ActivityActor extends apiModel {
+  public $displayName;
   public $url;
   protected $__imageType = 'ActivityActorImage';
   protected $__imageDataType = '';
   public $image;
-  public $displayName;
+  public $familyName;
+  public $givenName;
   public $id;
+  public function setDisplayName($displayName) {
+    $this->displayName = $displayName;
+  }
+  public function getDisplayName() {
+    return $this->displayName;
+  }
   public function setUrl($url) {
     $this->url = $url;
   }
@@ -448,11 +456,17 @@ class ActivityActor extends apiModel {
   public function getImage() {
     return $this->image;
   }
-  public function setDisplayName($displayName) {
-    $this->displayName = $displayName;
+  public function setFamilyName($familyName) {
+    $this->familyName = $familyName;
   }
-  public function getDisplayName() {
-    return $this->displayName;
+  public function getFamilyName() {
+    return $this->familyName;
+  }
+  public function setGivenName($givenName) {
+    $this->givenName = $givenName;
+  }
+  public function getGivenName() {
+    return $this->givenName;
   }
   public function setId($id) {
     $this->id = $id;

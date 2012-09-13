@@ -97,4 +97,21 @@ class apiUtils {
     }
     return $ret;
   }
+
+  /**
+   * Normalize all keys in an array to lower-case.
+   * @param array $arr
+   * @return array Normalized array.
+   */
+  public static function normalize($arr) {
+    if (!is_array($arr)) {
+      return array();
+    }
+
+    $normalized = array();
+    foreach ($arr as $key => $val) {
+      $normalized[strtolower($key)] = $val;
+    }
+    return $normalized;
+  }
 }

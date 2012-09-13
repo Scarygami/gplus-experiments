@@ -1,5 +1,5 @@
 =Description=
-This script will read the Google+ activities for one user and display various statistics as well as a full list of recent posts.
+This script will read the Google+ activities for one user or a search term and display various statistics as well as a full list of recent posts.
 
 You can check out a running version here:
 http://www.allmyplus.com/
@@ -8,12 +8,7 @@ http://www.allmyplus.com/
 The code is just hacked together quickly and not really optimised or cleaned-up yet.
 
 =Requirements=
-1) Google JS-API Key
-  Sign up for an API Key for using the Google JS-API loader http://code.google.com/apis/loader/
-
-  Edit config.php to set $jsapi_key accordingly.
-
-2) OAuth Tokens and Application Key at Google API Console
+1) OAuth Tokens and Application Key at Google API Console
   https://code.google.com/apis/console/
 
   Create a new project.
@@ -23,13 +18,13 @@ The code is just hacked together quickly and not really optimised or cleaned-up 
   Create OAuth2 Tokens in "API Access"
 
   Adjust settings in Quotas as necessary.
-  
+
   Edit config.php to set $client_id, $client_secret and $developer_key accordingly.
-  
-3) Base-URL
-  Edit config.php to set $base_url to the path where you place the scripts.    
-  
-  
+
+2) Base-URL
+  Edit config.php to set $base_url to the path where you place the scripts.
+
+
 ------------
 
 Copyright 2011-2012 Gerwin Sturm, FoldedSoft e.U. / www.foldedsoft.at
@@ -46,4 +41,4 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-  
+

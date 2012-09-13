@@ -17,12 +17,22 @@
 
 /**
  * Curl based implementation of apiIO.
- * This class implements http spec compliant request caching using the apiCache class
  *
  * @author Chris Chabot <chabotc@google.com>
  * @author Chirag Shah <chirags@google.com>
  */
+
+require_once 'apiCacheParser.php';
+
 class apiCurlIO implements apiIO {
+  const CONNECTION_ESTABLISHED = "HTTP/1.0 200 Connection established\r\n\r\n";
+  const FORM_URLENCODED = 'application/x-www-form-urlencoded';
+
+  private static $ENTITY_HTTP_METHODS = array("POST" => null, "PUT" => null);
+  private static $HOP_BY_HOP = array(
+      'connection', 'keep-alive', 'proxy-authenticate', 'proxy-authorization',
+      'te', 'trailers', 'transfer-encoding', 'upgrade');
+
   private static $DEFAULT_CURL_PARAMS = array (
       CURLOPT_RETURNTRANSFER => true,
       CURLOPT_FOLLOWLOCATION => 0,
@@ -55,44 +65,29 @@ class apiCurlIO implements apiIO {
    * @throws apiIOException on curl or IO error
    */
   public function makeRequest(apiHttpRequest $request) {
-    // If it's a GET request, check to see if we have a valid cached version
-    if ($request->getMethod() == 'GET') {
-      // check to see if this is signed, and if so use the original url + oauth
-      // access token to get a (per user context(!)) unique key to match against
-      if (($cachedRequest = $this->getCachedRequest($request)) !== false) {
-        if ($this->mustRevalidate($cachedRequest)) {
-          $addHeaders = array();
-          $headers = $this->getNormalizedHeaders($cachedRequest);
-          if (isset($headers['etag'])) {
-            $addHeaders[] = 'If-None-Match: ' . $headers['etag'];
-          } elseif (isset($headers['Date'])) {
-            $addHeaders[] = 'If-Modified-Since: ' . $headers['Date'];
-          }
-          if (is_array($request->getHeaders())) {
-            $request->setHeaders(array_merge($addHeaders, $request->getHeaders()));
-          } else {
-            $request->setHeaders($addHeaders);
-          }
-        } else {
-          // No need to revalidate the request, return it directly
-          return $cachedRequest;
+    // First, check to see if we have a valid cached version.
+    $cached = $this->getCachedRequest($request);
+    if ($cached !== false) {
+      if (apiCacheParser::mustRevalidate($cached)) {
+        $addHeaders = array();
+        if ($cached->getResponseHeader('etag')) {
+          // [13.3.4] If an entity tag has been provided by the origin server,
+          // we must use that entity tag in any cache-conditional request.
+          $addHeaders['If-None-Match'] = $cached->getResponseHeader('etag');
+        } elseif ($cached->getResponseHeader('date')) {
+          $addHeaders['If-Modified-Since'] = $cached->getResponseHeader('date');
         }
+
+        $request->setRequestHeaders($addHeaders);
+      } else {
+        // No need to revalidate the request, return it directly
+        return $cached;
       }
     }
-    // Couldn't use a cached version, so perform the actual request
 
-    if ($request->getMethod() == 'POST' || $request->getMethod() == 'PUT') {
-      // make sure a Content-length header is set
-      $postBody = $request->getPostBody();
-      if (! is_array($postBody)) {
-        $postContentLength = strlen($postBody) != 0 ? strlen($postBody) : '0';
-        $addHeaders = array('Content-Length: ' . $postContentLength);
-        if (is_array($request->getHeaders())) {
-          $request->setHeaders(array_merge($addHeaders, $request->getHeaders()));
-        } else {
-          $request->setHeaders($addHeaders);
-        }
-      }
+    if (array_key_exists($request->getRequestMethod(),
+          self::$ENTITY_HTTP_METHODS)) {
+      $request = $this->processEntityRequest($request);
     }
 
     $ch = curl_init();
@@ -101,32 +96,120 @@ class apiCurlIO implements apiIO {
     if ($request->getPostBody()) {
       curl_setopt($ch, CURLOPT_POSTFIELDS, $request->getPostBody());
     }
-    if ($request->getHeaders() && is_array($request->getHeaders())) {
-      curl_setopt($ch, CURLOPT_HTTPHEADER, array_unique($request->getHeaders()));
+
+    $requestHeaders = $request->getRequestHeaders();
+    if ($requestHeaders && is_array($requestHeaders)) {
+      $parsed = array();
+      foreach ($requestHeaders as $k => $v) {
+        $parsed[] = "$k: $v";
+      }
+      curl_setopt($ch, CURLOPT_HTTPHEADER, $parsed);
     }
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $request->getMethod());
+
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $request->getRequestMethod());
     curl_setopt($ch, CURLOPT_USERAGENT, $request->getUserAgent());
     $respData = curl_exec($ch);
+
+    // Retry if certificates are missing.
+    if (curl_errno($ch) == CURLE_SSL_CACERT) {
+      error_log('SSL certificate problem, verify that the CA cert is OK.'
+        . ' Retrying with the CA cert bundle from google-api-php-client.');
+      curl_setopt($ch, CURLOPT_CAINFO, dirname(__FILE__) . '/cacerts.pem');
+      $respData = curl_exec($ch);
+    }
+
     $respHeaderSize = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
     $respHttpCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
     $curlErrorNum = curl_errno($ch);
     $curlError = curl_error($ch);
     curl_close($ch);
     if ($curlErrorNum != CURLE_OK) {
-      throw new apiIOException('HTTP Error: (' . $respHttpCode . ') ' . $curlError);
+      throw new apiIOException("HTTP Error: ($respHttpCode) $curlError");
     }
-    if ($respHttpCode == 304 && $cachedRequest) {
-      // If the server responded NOT_MODIFIED, return the cached request
-      return $cachedRequest;
-    }
+
     // Parse out the raw response into usable bits
-    $rawResponseHeaders = substr($respData, 0, $respHeaderSize);
-    $responseBody = substr($respData, $respHeaderSize);
-    $responseHeaderLines = explode("\r\n", $rawResponseHeaders);
-    $responseHeaders = array();
+    list($responseHeaders, $responseBody) =
+          $this->parseHttpResponseBody($respData, $respHeaderSize);
+
+    if ($respHttpCode == 304 && $cached) {
+      // If the server responded NOT_MODIFIED, return the cached request.
+      if (isset($responseHeaders['connection'])) {
+        $hopByHop = array_merge(
+          self::$HOP_BY_HOP,
+          explode(',', $responseHeaders['connection'])
+        );
+
+        $endToEnd = array();
+        foreach($hopByHop as $key) {
+          if (isset($responseHeaders[$key])) {
+            $endToEnd[$key] = $responseHeaders[$key];
+          }
+        }
+        $cached->setResponseHeaders($endToEnd);
+      }
+      return $cached;
+    }
+
+    // Fill in the apiHttpRequest with the response values
+    $request->setResponseHttpCode($respHttpCode);
+    $request->setResponseHeaders($responseHeaders);
+    $request->setResponseBody($responseBody);
+    // Store the request in cache (the function checks to see if the request
+    // can actually be cached)
+    $this->setCachedRequest($request);
+    // And finally return it
+    return $request;
+  }
+
+  /**
+   * @visible for testing.
+   * Cache the response to an HTTP request if it is cacheable.
+   * @param apiHttpRequest $request
+   * @return bool Returns true if the insertion was successful.
+   * Otherwise, return false.
+   */
+  public function setCachedRequest(apiHttpRequest $request) {
+    // Determine if the request is cacheable.
+    if (apiCacheParser::isResponseCacheable($request)) {
+      apiClient::$cache->set($request->getCacheKey(), $request);
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
+   * @visible for testing.
+   * @param apiHttpRequest $request
+   * @return apiHttpRequest|bool Returns the cached object or
+   * false if the operation was unsuccessful.
+   */
+  public function getCachedRequest(apiHttpRequest $request) {
+    if (false == apiCacheParser::isRequestCacheable($request)) {
+      false;
+    }
+
+    return apiClient::$cache->get($request->getCacheKey());
+  }
+
+  /**
+   * @param $respData
+   * @param $headerSize
+   * @return array
+   */
+  public function parseHttpResponseBody($respData, $headerSize) {
+    if (stripos($respData, self::CONNECTION_ESTABLISHED) !== false) {
+      $respData = str_ireplace(self::CONNECTION_ESTABLISHED, '', $respData);
+    }
+
+    $responseBody = substr($respData, $headerSize);
+    $responseHeaderLines = explode("\r\n", substr($respData, 0, $headerSize));
+    $responseHeaders  = array();
+
     foreach ($responseHeaderLines as $headerLine) {
       if ($headerLine && strpos($headerLine, ':') !== false) {
         list($header, $value) = explode(': ', $headerLine, 2);
+        $header = strtolower($header);
         if (isset($responseHeaders[$header])) {
           $responseHeaders[$header] .= "\n" . $value;
         } else {
@@ -134,134 +217,38 @@ class apiCurlIO implements apiIO {
         }
       }
     }
-    // Fill in the apiHttpRequest with the response values
-    $request->setResponseHttpCode($respHttpCode);
-    $request->setResponseHeaders($responseHeaders);
-    $request->setResponseBody($responseBody);
-    // Store the request in cache (the function checks to see if the request can actually be cached)
-    $this->setCachedRequest($request);
-    // And finally return it
+
+    return array($responseHeaders, $responseBody);
+  }
+
+  /**
+   * @visible for testing
+   * Process an http request that contains an enclosed entity.
+   * @param apiHttpRequest $request
+   * @return apiHttpRequest Processed request with the enclosed entity.
+   */
+  public function processEntityRequest(apiHttpRequest $request) {
+    $postBody = $request->getPostBody();
+    $contentType = $request->getRequestHeader("content-type");
+
+    // Set the default content-type as application/x-www-form-urlencoded.
+    if (false == $contentType) {
+      $contentType = self::FORM_URLENCODED;
+      $request->setRequestHeaders(array('content-type' => $contentType));
+    }
+
+    // Force the payload to match the content-type asserted in the header.
+    if ($contentType == self::FORM_URLENCODED && is_array($postBody)) {
+      $postBody = http_build_query($postBody, '', '&');
+      $request->setPostBody($postBody);
+    }
+
+    // Make sure the content-length header is set.
+    if (!$postBody || is_string($postBody)) {
+      $postsLength = strlen($postBody);
+      $request->setRequestHeaders(array('content-length' => $postsLength));
+    }
+
     return $request;
-  }
-
-  private function setCachedRequest(apiHttpRequest $request) {
-    // Only cache GET requests
-    if ($request->getMethod() != 'GET') {
-      return false;
-    }
-    // Analyze the request headers to see if there is a valid caching strategy.
-    $headers = $this->getNormalizedHeaders($request);
-    // And parse all the bits that are required for the can-cache evaluation
-    $etag = isset($headers['etag']) ? $headers['etag'] : false;
-    $expires = isset($headers['expires']) ? strtotime($headers['expires']) : false;
-    $date = isset($headers['date']) ? strtotime($headers['date']) : time();
-    $cacheControl = array();
-    if (isset($headers['cache-control'])) {
-      $cacheControl = explode(', ', $headers['cache-control']);
-      foreach ($cacheControl as $key => $val) {
-        $cacheControl[$key] = strtolower($val);
-      }
-    }
-    $pragmaNoCache = isset($headers['pragma']) ? strtolower($headers['pragma']) == 'no-cache' : false;
-    // evaluate if the request can be cached
-    $canCache = ! in_array('no-store', $cacheControl) &&                                            // If no Cache-Control: no-store is present, we can cache
-              (($etag || $expires > $date) ||                                                       // if the response has an etag, or if it has an expiration date that is greater then the current date, we can check for a 304 NOT MODIFIED, so cache
-              (! $etag && ! $expires && ! $pragmaNoCache && ! in_array('no-cache', $cacheControl))); // or if there is no etag, and no expiration set, but also no pragma: no-cache and no cache-control: no-cache, we can cache (but we'll set our own expires header to make sure it's refreshed frequently)
-    if ($canCache) {
-      // Set an 1 hour expiration header if non exists, and no do-not-cache directives exist
-      if (! $etag && ! $expires && ! $pragmaNoCache && ! in_array('no-cache', $cacheControl)) {
-        // Add Expires and Date headers to simplify the cache retrieval code path
-        $request->setResponseHeaders(array_merge(array(
-            'Expires' => date('r', time() + 60 * 60),
-            'Date' => date('r', time())), $request->getHeaders()));
-      }
-      apiClient::$cache->set($this->getRequestKey($request), $request);
-    }
-  }
-
-  private function getCachedRequest(apiHttpRequest $request) {
-    if (($cachedRequest = apiClient::$cache->get($this->getRequestKey($request))) !== false) {
-      // There is a cached version of this request, validate if it can actually be used
-      $headers = $this->getNormalizedHeaders($request);
-      $etag = isset($headers['etag']) ? $headers['etag'] : false;
-      $expires = isset($headers['expires']) ? strtotime($headers['expires']) : false;
-      $date = isset($headers['date']) ? strtotime($headers['date']) : time();
-      $cacheControl = array();
-      if (isset($headers['cache-control'])) {
-        $cacheControl = explode(', ', $headers['cache-control']);
-        foreach ($cacheControl as $key => $val) {
-          $cacheControl[$key] = strtolower($val);
-        }
-      }
-      // Only use the cached request if it has an etag or expiration date that's lower then the current time
-      if ($etag || ($expires < $date)) {
-        // There is either an ETag set, or the expiration time is less then the current time, return it
-        return $cachedRequest;
-      } else {
-        // Clean out the stale cache entry before returning
-        apiClient::$cache->delete($this->getRequestKey($request));
-      }
-    }
-    // Either the request was not cached, or it has expired, return false
-    return false;
-  }
-
-  /**
-   * Returns true if the request has specified must-revalidate in it's Cache-Control header, or if it doesn't have an Expires header but does have an ETag or has expired
-   * @param apiHttpRequest $request
-   * @return boolean
-   */
-  private function mustRevalidate(apiHttpRequest $request) {
-    // check to see if we need to go the If-Modified-Since or Etag route (in which case we make the request, but accept a 304 NOT MODIFIED)
-    $headers = $this->getNormalizedHeaders($request);
-    $etag = isset($headers['etag']) ? $headers['etag'] : false;
-    $expires = isset($headers['expires']) ? strtotime($headers['expires']) : false;
-    $date = isset($headers['date']) ? strtotime($headers['date']) : time();
-    $cacheControl = array();
-    if (isset($headers['cache-control'])) {
-      $cacheControl = explode(', ', $headers['cache-control']);
-      foreach ($cacheControl as $key => $val) {
-        $cacheControl[$key] = strtolower($val);
-      }
-    }
-    return (in_array('must-revalidate', $cacheControl) || ($etag && ! $expires) || $expires > $date);
-  }
-
-  /**
-   * Returns a cache key depending on if this was an OAuth signed request in which case it will use the non-signed url and access key to make this caching key unique
-   * per authenticated user, else use the plain request url
-   * @param apiHttpRequest $request
-   * @return a md5 sum of the request url
-   */
-  private function getRequestKey(apiHttpRequest $request) {
-    $cacheUrl = $request->getUrl();
-    if (isset($request->accessKey)) {
-      $cacheUrl .= $request->accessKey;
-    }
-
-    $headers = $request->getHeaders();
-    $token = apiClient::$auth->accessToken;
-    if (isset($token['id_token']) && $token['id_token']) {
-      $cacheUrl .= $token['id_token'];
-    }
-
-    return md5($cacheUrl);
-  }
-
-  /**
-   * Normalize all HTTP headers.
-   * @param apiHttpRequest $request
-   * @return array
-   */
-  private function getNormalizedHeaders(apiHttpRequest $request) {
-    if (!is_array($request->getResponseHeaders())) {
-      return array();
-    }
-    $headers = $request->getResponseHeaders();
-    $newHeaders = array();
-    foreach ($headers as $key => $val) {
-      $newHeaders[strtolower($key)] = $val;
-    }
-    return $newHeaders;
   }
 }
