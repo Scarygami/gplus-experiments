@@ -1,0 +1,33 @@
+{
+  "manifest_version": 2,
+  "name": "History Template - Content Script",
+  "version": "1.0.0",
+  "description": "Example of how to use the Google+ History API in Chrome Extensions as Content Script",
+  "permissions": [
+    "notifications",
+    "https://accounts.google.com/o/oauth2/token",
+    "https://www.googleapis.com/"
+  ],
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://plus.google.com/*"],
+      "js": ["history_cs.js"]
+    },
+    {
+      "matches": ["http://www.google.com/robots.txt*"],
+      "js": ["oauth2/oauth2_inject.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "background": {
+    "page": "history_background.html"
+  },
+  "web_accessible_resources": [
+    "icon48.png"
+  ]
+}
