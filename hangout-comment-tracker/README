@@ -8,20 +8,19 @@ You can test the extension by starting a hangout from here: http://www.allmyplus
 =Installation=
 
   * Go to http://code.google.com/apis/youtube/dashboard/ and create a new API key.
-    Edit comments.js and replace <YT-API-KEY> with your API Key.
+    Edit comments.xml and replace <YT-API-KEY> with your API Key.
 
   * Go to https://code.google.com/apis/console/ and create a new project.
     Activate the "Google+ Hangouts API" and "Google+ API" in Services.
-    Edit comments.js and replace <API-KEY> with your API Key (found in API Access).
+    Edit comments.xml and replace <API-KEY> with your API Key (found in API Access).
 
   * Edit comments.xml and change <YOUR PATH> to where you plan to upload the files.
-    Edit comments.js and change <YOUR PATH> to the same path.
-    Note: The Tracker-URL will only work if you also setup and uploaded the comment-tracker-standalone version.
+    Edit comments.css and change <YOUR PATH> to the same folder.
 
   * Upload all the files to <YOUR PATH>
     Please note that the files need to be publicly accessible.
 
-  * Go to "Hangouts" and put the full URL to <YOUR PATH>comments.xml in "Gadget URL"
+  * Go to "Hangouts" and put the full URL to <YOUR PATH>/comments.xml in "Application URL"
     Also change the Application Type to Extension
 
   * Save and you are ready to "Enter a hangout!" :)

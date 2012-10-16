@@ -1,44 +1,41 @@
-body {background-color:#FFFFFF; font-family:sans-serif; font-size:10pt; color:#000000; text-align:left; padding:0; margin:0;}
-h1 {font-size: 12pt; font-weight: bold; text-align: center;}
-div {-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; padding: 5px; margin: 0;}
-a {cursor: pointer; text-decoration: none;}
-a:hover {text-decoration: underline;}
-p.smallr {font-size:9pt; text-align:right; margin: 0px;}
-button {font-size: 12px;}
-.tab {height: 200px; width: 100%; overflow-y: scroll; overflow-x: auto;}
-#header { border-bottom: 1px dotted #CCC; padding: 0 0 5px 0; text-align: center;}
-#posts, #shared {padding: 0;}
-.settings {color: #999;}
-#comments, #comments_pinned, #comments_unpinned {padding: 0;}
+#ct { padding: 0; height: 100%; }
 
-#share .settings {
-  border-bottom: 1px dotted #CCC; padding: 0 0 5px 0; text-align: center;
-}
+.ct {background-color:#FFFFFF; font-family:sans-serif; font-size:10pt; color:#000000; text-align:left; padding:0; margin:0;}
+.ct div {-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; margin: 0;}
+.ct a {cursor: pointer; text-decoration: none;}
+.ct a:hover {text-decoration: underline;}
+.ct button {font-size: 12px;}
+.ct-small {font-size:9pt; margin: 0px;}
 
-#menu {
+.ct-tab {height: 200px; width: 100%; overflow-y: scroll; overflow-x: auto; padding: 5px;}
+.ct-header { border-bottom: 1px dotted #CCC; padding: 0 0 5px 0; text-align: center;}
+
+#ct-menu {
   height: 22px;
   width: 100%; min-width: 100%; max-width: 100%;
   overflow: hidden;
   padding: 2px 2px 2px 6px;
-  background-color: #999;
+  background-color: #BBB;
   text-align: left;
   -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;
 }
 
-#shares_added {
+#ct-menu ul {
+  padding: 0; margin: 0;
+}
+
+#ct-shares_added {
   color: black;
   background-color: yellow;
   padding: 2px;
 }
 
-a.menu {
-  padding: 2px;
+.ct-menu {
+  padding: 2px 8px;
   height: 20px;
   display: inline-block;
-  width: 90px;
   text-align: center;
   background-color: #DDD;
-  text-decoration: none;
   color: black;
   font-weight: bold;
   -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
@@ -46,48 +43,136 @@ a.menu {
   cursor: pointer;
 }
 
-a.highlight {
+.ct-highlight {
   background-color: #FF0;
 }
 
-a.menu:hover {
+.ct-menu:hover {
   background-color: #EEE;
   text-decoration: none;
   color: black;
 }
 
-a.selected {
+.ct-selected {
   background-color: #FFF;
 }
 
-.post { border-bottom: 1px dotted #CCC; vertical-align: top; padding: 12px 8px 7px 47px; word-wrap: break-word; position: relative;}
+.ct-post { border-bottom: 1px dotted #CCC; vertical-align: top; padding: 12px 8px 7px 47px; word-wrap: break-word; position: relative;}
+.ct-comment { border-bottom: 1px dotted #CCC; vertical-align: top; padding: 7px 8px 7px 47px; word-wrap: break-word; position: relative; }
 
-.comment { border-bottom: 1px dotted #CCC; vertical-align: top; padding: 7px 8px 7px 47px; word-wrap: break-word; position: relative; }
-.actions { display: none; position: absolute; bottom: 2px; right: 2px; padding: 2px; background-color: rgba(255, 255, 255, 0.8); }
-.action { display: inline-block; margin: 0px 2px 0px 2px; background-image: url(https://www.foldedsoft.at/plus/hangout-comment-tracker/images/icons.png?4); cursor: pointer;}
-.action_hide { width: 20px; height: 20px; background-position: 0px 0px; }
-.action_unhide { width: 20px; height: 20px; background-position: -20px 0px; }
-.action_pin { width: 20px; height: 20px; background-position: -39px 0px; }
-.action_unpin { width: 16px; height: 20px; background-position: -59px 0px; }
-.action_track { width: 20px; height: 20px; background-position: -75px 0px; }
-.action_reshares { width: 25px; height: 20px; background-position: -96px 0px; }
-.action_watch { width: 20px; height: 20px; background-position: -122px 0px; }
-.action_unwatch { width: 20px; height: 20px; background-position: -143px 0px; }
-.action_add { width: 20px; height: 20px; background-position: -163px 0px; }
-.important { border: 1px solid black; margin-bottom: 2px;}
-.hidden { text-decoration: line-through; }
-.comment:hover .actions { display: block; }
-.post:hover .actions { display: block; }
-.comment_pic, .post_pic {display: block; border: 0; max-width: 32px; max-height: 32px; float: left; margin-left: -40px;}
-.service_pic {display: block; border: 0; max-width: 16px; max-height: 16px; float: left; margin-left: -20px; margin-top: 20px;}
-.comment_time, .post_time {display: block; float: right; color: #999; padding: 0;}
-.comment_text, .post_text {margin-top: 2px; padding: 0;}
-.comment_updated {background-color: yellow; font-weight: bold; color: red;}
-.comment_deleted {text-decoration:line-through;}
+.ct-actions { opacity: 0.15; position: absolute; bottom: 0; right: 2px; padding: 2px; background-color: rgba(255, 255, 255, 0.8); }
+.ct-action { display: inline-block; margin: 0px 2px 0px 2px; background-image: url(<YOUR PATH>/images/icons.png); cursor: pointer;}
+.ct-action_hide { width: 20px; height: 20px; background-position: 0px 0px; }
+.ct-action_unhide { width: 20px; height: 20px; background-position: -20px 0px; }
+.ct-action_pin { width: 20px; height: 20px; background-position: -39px 0px; }
+.ct-action_unpin { width: 16px; height: 20px; background-position: -59px 0px; }
+.ct-action_track { width: 20px; height: 20px; background-position: -75px 0px; }
+.ct-action_tracker { width: 20px; height: 20px; background-position: -203px 0px; }
+.ct-action_reshares { width: 25px; height: 20px; background-position: -96px 0px; }
+.ct-action_watch { width: 20px; height: 20px; background-position: -122px 0px; }
+.ct-action_unwatch { width: 20px; height: 20px; background-position: -183px 0px; }
+.ct-action_add { width: 20px; height: 20px; background-position: -163px 0px; }
+.ct-important { border: 1px solid black; margin-bottom: 2px;}
+.ct-hidden { text-decoration: line-through; }
+.ct-comment:hover .ct-actions { opacity: 1;}
+.ct-post:hover .ct-actions { opacity: 1;}
+.ct-comment_pic, .ct-post_pic {display: block; border: 0; max-width: 32px; max-height: 32px; float: left; margin-left: -40px;}
+.ct-service_pic {display: block; border: 0; max-width: 16px; max-height: 16px; float: left; margin-left: -20px; margin-top: 20px;}
+.ct-comment_time, .ct-post_time {display: block; float: right; color: #999; padding: 0;}
+.ct-comment_text, .ct-post_text {margin-top: 2px; padding: 0;}
+.ct-comment_updated {background-color: yellow; font-weight: bold; color: red;}
+.ct-comment_deleted {text-decoration:line-through;}
 
-.post_time a {color: #999;}
-.comment_time a {color: #999;}
-.comment_updated a {color: red;}
+.ct-post_time a {color: #999;}
+.ct-comment_time a {color: #999;}
+.ct-comment_updated a {color: red;}
 
-#searching { vertical-align: middle; padding: 7px; color: #999;}
+#ct-menu_actions {
+  display: block;
+  position: fixed;
+  top: 0;
+  right: 0;
+}
 
+#ct-searching { vertical-align: middle; padding: 7px; color: #999;}
+
+.ct-background-0 {
+  background: white;
+}
+
+.ct-background-1 {
+  background: #FF0;
+  background: -moz-linear-gradient(-45deg, #FF0 0%, #ffffff 30%);
+  background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#FF0), color-stop(30%,#ffffff));
+  background: -webkit-linear-gradient(-45deg, #FF0 0%,#ffffff 30%); background: -o-linear-gradient(-45deg, #FF0 0%,#ffffff 30%);
+  background: -ms-linear-gradient(-45deg, #FF0 0%,#ffffff 30%); background: linear-gradient(135deg, #FF0 0%,#ffffff 30%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#FF0', endColorstr='#ffffff',GradientType=1 );
+}
+
+.ct-background-2 {
+  background: #0F0;
+  background: -moz-linear-gradient(-45deg, #0F0 0%, #ffffff 30%);
+  background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#0F0), color-stop(30%,#ffffff));
+  background: -webkit-linear-gradient(-45deg, #0F0 0%,#ffffff 30%); background: -o-linear-gradient(-45deg, #0F0 0%,#ffffff 30%);
+  background: -ms-linear-gradient(-45deg, #0F0 0%,#ffffff 30%); background: linear-gradient(135deg, #0F0 0%,#ffffff 30%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0F0', endColorstr='#ffffff',GradientType=1 );
+}
+
+.ct-background-3 {
+  background: #00F;
+  background: -moz-linear-gradient(-45deg, #00F 0%, #ffffff 30%);
+  background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#00F), color-stop(30%,#ffffff));
+  background: -webkit-linear-gradient(-45deg, #00F 0%,#ffffff 30%); background: -o-linear-gradient(-45deg, #00F 0%,#ffffff 30%);
+  background: -ms-linear-gradient(-45deg, #00F 0%,#ffffff 30%); background: linear-gradient(135deg, #00F 0%,#ffffff 30%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00F', endColorstr='#ffffff',GradientType=1 );
+}
+
+.ct-background-4 {
+  background: #F0F;
+  background: -moz-linear-gradient(-45deg, #F0F 0%, #ffffff 30%);
+  background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#F0F), color-stop(30%,#ffffff));
+  background: -webkit-linear-gradient(-45deg, #F0F 0%,#ffffff 30%); background: -o-linear-gradient(-45deg, #F0F 0%,#ffffff 30%);
+  background: -ms-linear-gradient(-45deg, #F0F 0%,#ffffff 30%); background: linear-gradient(135deg, #F0F 0%,#ffffff 30%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#F0F', endColorstr='#ffffff',GradientType=1 );
+}
+
+.ct-background-5 {
+  background: #F00;
+  background: -moz-linear-gradient(-45deg, #F00 0%, #ffffff 30%);
+  background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#F00), color-stop(30%,#ffffff));
+  background: -webkit-linear-gradient(-45deg, #F00 0%,#ffffff 30%); background: -o-linear-gradient(-45deg, #F00 0%,#ffffff 30%);
+  background: -ms-linear-gradient(-45deg, #F00 0%,#ffffff 30%); background: linear-gradient(135deg, #F00 0%,#ffffff 30%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#F00', endColorstr='#ffffff',GradientType=1 );
+}
+
+.ct-background-6 {
+  background: #0FF;
+  background: -moz-linear-gradient(-45deg, #0FF 0%, #ffffff 30%);
+  background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#0FF), color-stop(30%,#ffffff));
+  background: -webkit-linear-gradient(-45deg, #0FF 0%,#ffffff 30%); background: -o-linear-gradient(-45deg, #0FF 0%,#ffffff 30%);
+  background: -ms-linear-gradient(-45deg, #0FF 0%,#ffffff 30%); background: linear-gradient(135deg, #0FF 0%,#ffffff 30%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0FF', endColorstr='#ffffff',GradientType=1 );
+}
+
+.ct-background-7 {
+  background: #F90;
+  background: -moz-linear-gradient(-45deg, #F90 0%, #ffffff 30%);
+  background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#F90), color-stop(30%,#ffffff));
+  background: -webkit-linear-gradient(-45deg, #F90 0%,#ffffff 30%); background: -o-linear-gradient(-45deg, #F90 0%,#ffffff 30%);
+  background: -ms-linear-gradient(-45deg, #F90 0%,#ffffff 30%); background: linear-gradient(135deg, #F90 0%,#ffffff 30%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#F90', endColorstr='#ffffff',GradientType=1 );
+}
+
+.ct-background-8 {
+  background: #0F9;
+  background: -moz-linear-gradient(-45deg, #0F9 0%, #ffffff 30%);
+  background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#0F9), color-stop(30%,#ffffff));
+  background: -webkit-linear-gradient(-45deg, #0F9 0%,#ffffff 30%); background: -o-linear-gradient(-45deg, #0F9 0%,#ffffff 30%);
+  background: -ms-linear-gradient(-45deg, #0F9 0%,#ffffff 30%); background: linear-gradient(135deg, #0F9 0%,#ffffff 30%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0F9', endColorstr='#ffffff',GradientType=1 );
+}
+
+::-webkit-scrollbar {background: transparent; width: 10px;}
+::-webkit-scrollbar-corner {background: transparent;}
+::-webkit-scrollbar-thumb {background-color: rgba(0, 0, 0, 0.2);border: solid whiteSmoke 2px;}
+::-webkit-scrollbar-thumb:hover {background-color: rgba(0, 0, 0, 0.3);}
