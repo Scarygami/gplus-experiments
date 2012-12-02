@@ -1,0 +1,44 @@
+Description
+-----------
+
+This extension takes screenshots of your current hangout and saves them to Google+ History.
+Images will be uploaded to Google Drive and added to Google+ History from there.
+
+Installation
+------------
+
+  * Sign-up for the Google+ History Developer Preview: https://developers.google.com/+/history/preview/
+
+  * Go to https://code.google.com/apis/console/ and create a new project.
+
+  * Activate the "Drive API", "Google+ API" and "Google+ History API" in Services.
+
+  * The files server/oauth_callback.html and server/oauth_callback.html2 need to be uploaded to a publicly available website path (<YOUR_REDIRECT_PATH>).
+
+  * Create a new Client ID for web application in API Access
+
+  * Add <YOUR_REDIRECT_PATH>/oauth_callback.html and <YOUR_REDIRECT_PATH>/oauth_callback2.html as Redirect URIs
+
+  * Edit extension/oauth2/adapters/google.js and extension/adapters/google2.js and replace <YOUR_REDIRECT_PATH> with your server path where you uploaded the files.
+
+  * Edit extension/manifest.json and replace <YOUR_REDIRECT_PATH> there as well.
+
+  * Edit moments_background.js and replace <CLIENT_ID> and <CLIENT_SECRET> with your information from the API Console.
+
+  * Load the extension as unpacked extension in Google Chrome
+
+
+----
+Copyright 2012 Gerwin Sturm, FoldedSoft e.U., https://plus.google.com/112336147904981294875, http://www.foldedsoft.at/
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

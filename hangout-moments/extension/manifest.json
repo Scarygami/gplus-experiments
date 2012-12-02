@@ -1,0 +1,40 @@
+{
+  "manifest_version": 2,
+  "name": "Hangout Moments",
+  "version": "1.0.0",
+  "description": "Capture your most precious moments in a Hangout",
+  "permissions": [
+    "notifications",
+    "https://accounts.google.com/o/oauth2/token",
+    "https://www.googleapis.com/"
+  ],
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "content_security_policy": "script-src 'self' https://apis.google.com; object-src 'self'",
+  "content_scripts": [
+    {
+      "matches": ["https://plus.google.com/hangouts/_*"],
+      "js": ["moments_inject.js"],
+      "run_at": "document_end"
+    },
+    {
+      "matches": ["<YOUR_REDIRECT_PATH>/oauth_callback.html*"],
+      "js": ["oauth2/oauth2_inject.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["<YOUR_REDIRECT_PATH>/oauth_callback2.html*"],
+      "js": ["oauth2/oauth2_inject.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "background": {
+    "page": "moments_background.html"
+  },
+  "web_accessible_resources": [
+    "icon48.png", "screenshot.png", "screenshot2.png"
+  ]
+}
