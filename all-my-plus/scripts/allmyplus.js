@@ -897,7 +897,7 @@ function AllMyPlus(global, base_url, api_key, author, keyword) {
     if (item.object.content === "") {
       return 0;
     } else {
-      return item.object.originalContent.length;
+      return item.object.content.length;
     }
   }
 
