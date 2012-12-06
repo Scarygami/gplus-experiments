@@ -511,7 +511,7 @@
       </table><br>
       <table class="sortable" id="posts_table">
         <thead>
-          <tr><th>Date</th><th class="sorttable_numeric" title="Audience: P = Public, E = Extended Circles, C = Circles, L = Limited">A</th><th class="sorttable_numeric" title="Comments">C</th><th class="sorttable_numeric" title="Reshares">R</th><th class="sorttable_numeric" title="+1's">+1</th><th>Post</th></tr>
+          <tr><th>Date</th><th class="sorttable_numeric" title="Audience: P = Public, E = Extended Circles, C = Circles, L = Limited">A</th><th class="sorttable_numeric" title="Comments">C</th><th class="sorttable_numeric" title="Reshares">R</th><th class="sorttable_numeric" title="+1's">+1</th><th class="sorttable_numeric" title="Post Length">L</th><th>Post</th></tr>
         </thead>
         <tbody>
         </tbody>
