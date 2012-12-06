@@ -894,11 +894,7 @@ function AllMyPlus(global, base_url, api_key, author, keyword) {
   }
 
   function post_length(item) {
-    if (item.object.content === "") {
-      return 0;
-    } else {
-      return item.object.content.length;
-    }
+    return (item.object.originalContent || item.object.content || "").length;
   }
 
   function format_post(item) {
