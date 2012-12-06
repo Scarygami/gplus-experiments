@@ -893,6 +893,14 @@ function AllMyPlus(global, base_url, api_key, author, keyword) {
     return str_contents;
   }
 
+  function post_length(item) {
+    if (item.object.content === "") {
+      return 0;
+    } else {
+      return item.object.originalContent.length;
+    }
+  }
+
   function format_post(item) {
     var str_contents, a, chk_pic, att, att_link, att_preview, att_title, chk_reshare, author_url, author_name;
     str_contents = "";
@@ -1001,6 +1009,7 @@ function AllMyPlus(global, base_url, api_key, author, keyword) {
     } else {
       str_row += "<td>0<\/td>";
     }
+    str_row += "<td>" + post_length(item) + "<\/td>";
     str_row += "<td>" + format_post(item) + "<\/td>";
     str_row += "</tr>";
 
