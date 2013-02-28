@@ -1,0 +1,52 @@
+body {
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+}
+
+.button {
+  display: inline-block;
+  text-align: left;
+  padding: 5px;
+  min-width: 120px;
+  cursor: pointer;
+  line-height: 20px;
+  border-radius: 4px;
+  margin-top: 5px;
+}
+
+.button .icon {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+}
+
+.button .label {
+  padding-left: 10px;
+}
+
+.gplus, .song {
+  background: #fff;
+  border: 1px solid #e6e6e6;
+}
+.gplus .icon {
+  background: url('btn_icons_sprite.png') transparent 0 -40px no-repeat;
+}
+.gplus:hover {
+  background-color: #cc3732;
+  color: #fff;
+  border: 1px solid #dd4b39;
+}
+.song:hover {
+  background-color: #33F;
+  color: #fff;
+}
+.gplus:hover .icon {
+  background: url('btn_icons_sprite.png') transparent 0 0px no-repeat;
+}
+
+.song .icon {
+  background: url('icon20.png');
+}
+.song:hover .icon {
+  background: url('icon20_white.png');
+}

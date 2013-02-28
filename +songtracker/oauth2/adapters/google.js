@@ -4,15 +4,13 @@ OAuth2.adapter('google', {
       'client_id={{CLIENT_ID}}&' +
       'redirect_uri={{REDIRECT_URI}}&' +
       'scope={{API_SCOPE}}&' +
+      'request_visible_actions={{VISIBLE_ACTIONS}}&' +
       'access_type=offline&' +
       'response_type=code')
         .replace('{{CLIENT_ID}}', config.clientId)
-        .replace('{{REDIRECT_URI}}', this.redirectURL(config))
-        .replace('{{API_SCOPE}}', config.apiScope);
-  },
-
-  redirectURL: function(config) {
-    return 'http://www.google.com/robots.txt';
+        .replace('{{REDIRECT_URI}}', config.redirectUri)
+        .replace('{{API_SCOPE}}', config.apiScope)
+        .replace('{{VISIBLE_ACTIONS}}', config.requestVisibleActions);
   },
 
   parseAuthorizationCode: function(url) {
@@ -36,7 +34,7 @@ OAuth2.adapter('google', {
       code: authorizationCode,
       client_id: config.clientId,
       client_secret: config.clientSecret,
-      redirect_uri: this.redirectURL(config),
+      redirect_uri: config.redirectUri,
       grant_type: 'authorization_code'
     };
   },

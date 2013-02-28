@@ -20,7 +20,7 @@
       "js": ["tracker_content.js"]
     },
     {
-      "matches": ["http://www.google.com/robots.txt*"],
+      "matches": ["YOUR_REDIRECT_URI*"],
       "js": ["oauth2/oauth2_inject.js"],
         "run_at": "document_start"
     }

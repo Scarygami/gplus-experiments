@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Gerwin Sturm, FoldedSoft e.U. / www.foldedsoft.at
+ * Copyright (c) 2012-2013 Gerwin Sturm, FoldedSoft e.U. / www.foldedsoft.at
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License. You may obtain
@@ -33,9 +33,11 @@
     authorized = false;
 
     google = new global.OAuth2("google", {
-      client_id: "<YOUR_CLIENT_ID>",
-      client_secret: "<YOUR_CLIENT_SECRET>",
-      api_scope: "https://www.googleapis.com/auth/plus.moments.write https://www.googleapis.com/auth/plus.me"
+      clientId: "YOUR_CLIENT_ID",
+      clientSecret: "YOUR_CLIENT_SECRET",
+      apiScope: "https://www.googleapis.com/auth/plus.login",
+      requestVisibleActions: "http://schemas.google.com/ListenActivity",
+      redirectUri: "YOUR_REDIRECT_URI"
     });
 
     this.isAuthorized = function () {
@@ -49,32 +51,17 @@
     this.authorize = function (cb) {
       google.authorize(function () {
         access_token = google.getAccessToken();
-        authorized = true;
-        try { cb(); } catch (e) { console.log("Error calling callback"); }
+        if (!access_token) {
+          authorized = false;
+          tracking = false;
+        } else {
+          authorized = true;
+        }
+        try { cb(authorized); } catch (e) { global.console.log("Error calling callback"); }
       });
     };
 
-    this.deauthorize = function () {
-      google.clearAccessToken();
-      access_token = "";
-      tracking = false;
-      authorized = false;
-    };
-
-    this.startTracking = function (cb) {
-      google.authorize(function () {
-        access_token = google.getAccessToken();
-        authorized = true;
-        tracking = true;
-        try { cb(); } catch (e) { console.log("Error calling callback"); }
-      });
-    };
-
-    this.stopTracking = function () {
-      tracking = false;
-    };
-
-    function createNotification(text, title, image) {
+    function createNotification(text, title, image, no_timeout) {
       var notification;
       notification = global.webkitNotifications.createNotification(
         image || global.chrome.extension.getURL("icon48.png"),
@@ -82,8 +69,56 @@
         text
       );
       notification.show();
-      global.setTimeout(function () { notification.cancel(); }, 5000);
+      if (!no_timeout) {
+        global.setTimeout(function () { notification.cancel(); }, 5000);
+      }
     }
+
+    this.deauthorize = function (cb) {
+      var xhr;
+      tracking = false;
+
+      access_token = google.getAccessToken();
+      if (!access_token) {
+        google.clearAccessToken();
+        authorized = false;
+        try { cb(); } catch (e) { global.console.log("Error calling callback"); }
+        return;
+      }
+
+      xhr = new global.XMLHttpRequest();
+
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4) {
+          if (xhr.status >= 200 && xhr.status <= 204) {
+            // successfully disconnected
+            global.console.log("Disconnected");
+          } else {
+            createNotification("Please visit plus.google.com/apps to disconnect the application manually.", "Error disconnecting", undefined, true);
+          }
+        }
+        google.clearAccessToken();
+        access_token = undefined;
+        authorized = false;
+        try { cb(); } catch (e) { global.console.log("Error calling callback"); }
+      };
+
+      xhr.open("GET", "https://accounts.google.com/o/oauth2/revoke?token=" + access_token, true);
+      xhr.send();
+    };
+
+    this.startTracking = function (cb) {
+      google.authorize(function () {
+        access_token = google.getAccessToken();
+        authorized = true;
+        tracking = true;
+        try { cb(); } catch (e) { global.console.log("Error calling callback"); }
+      });
+    };
+
+    this.stopTracking = function () {
+      tracking = false;
+    };
 
     function writeMoment(info) {
       var xhr, message;
@@ -95,14 +130,12 @@
         var response, text;
         if (xhr.readyState == 4) {
           if (xhr.status >= 200 && xhr.status <= 204) {
-            console.log("Success: " + xhr.responseText);
+            global.console.log("Success: " + xhr.responseText);
             response = JSON.parse(xhr.responseText);
             text = response.target.name;
-            /* // this part for the notification when the title is reduced to title only (see below)
             if (response.target.byArtist) {
               text += " by " + response.target.byArtist.name;
             }
-            */
             createNotification(text, undefined, response.target.image);
           } else {
             createNotification("Error " + xhr.status + ": " + xhr.statusText, "Error adding song to Google+ History");
@@ -110,7 +143,7 @@
         }
       };
 
-      xhr.open("POST", "https://www.googleapis.com/plus/v1moments/people/me/moments/vault?debug=true", true);
+      xhr.open("POST", "https://www.googleapis.com/plus/v1/people/me/moments/vault?debug=true", true);
 
       xhr.setRequestHeader("Content-Type", "application/json");
       xhr.setRequestHeader("Authorization", "OAuth " + access_token);
@@ -120,7 +153,7 @@
 
     global.chrome.extension.onMessage.addListener(
       function (request, sender) {
-        var now, url, write;
+        var now, write;
         now = (new Date()).getTime();
         if (tracking && authorized) {
           if (sender.tab && request.title) {
@@ -137,18 +170,10 @@
               if (current_duration === 0) {
                 write = (now - time_stamp > 60000);
               } else {
-                // wait until 75% of the song has been listened to (current_duration * 1000 * 75/100)
                 write = (now - time_stamp > current_duration * 750);
               }
               if (write && !written) {
                 written = true;
-                // this uses a server-side script to create a shareable URL, use your own if you want
-                url = "https://www.foldedsoft.at/plus/history/song.php";
-                // Using "<Title> by <Artist>" as title for now because the artist name isn't displayed in the history yet
-                // Also do some conversion of the encoded parts because the History API doesn't like %xx parts in the URLs
-                url += "?title=" + encodeURIComponent(current_title + " by " + current_artist).replace(/_/gi, "%5f").replace(/%/gi, "_");
-                url += "&artist=" + encodeURIComponent(current_artist).replace(/_/gi, "%5f").replace(/%/gi, "_");
-                url += "&image=" + encodeURIComponent(current_image).replace(/_/gi, "%5f").replace(/%/gi, "_");
 
                 // make sure we have a valid token before trying to submit anything
                 google.authorize(function () {
@@ -157,7 +182,15 @@
                   writeMoment({
                     "type": "http://schemas.google.com/ListenActivity",
                     "target": {
-                      "url": url
+                      "id": (current_title + " by " + current_artist).replace(/\W/gi, "_"),
+                      "type": "http://schema.org/MusicRecording",
+                      "name": current_title,
+                      "description": current_title + " by " + current_artist,
+                      "image": current_image,
+                      "byArtist": {
+                        "type": "http://schema.org/MusicGroup",
+                        "name": current_artist
+                      }
                     }
                   });
                 });
@@ -187,5 +220,5 @@
   }
 
   global.songtracker = new Songtracker();
-}(window));
+}(this));
 

@@ -1,50 +1,45 @@
-Description
------------
-This Chrome extension writes songs you are listening to on Google Play Music into your Google+ History.
+# +SongTracker
 
-Disclaimer
-----------
-The Google+ History API is still in developer preview so this extension might stop working without notice.
+### Description
 
-Requirements/Installation
--------------------------
-1) Sign-up for the Google+ History developer preview: https://developers.google.com/+/history/preview/
+This Chrome extension writes songs you are listening to on Google Play Music into your Google+ App Activities.
 
-2) OAuth Tokens at Google API Console https://code.google.com/apis/console/
+### Requirements/Installation
+
+1) Upload an empty file to your server, URL of this file will be `YOUR_REDIRECT_URI`
+
+2) Go to Google API Console https://code.google.com/apis/console/
 
   Create a new project.
 
-  Activate the Google+ API and Google+ History API in Services
+  Activate the Google+ API in Services
 
-  Create OAuth2 Tokens in "API Access"
+  Create a new Client ID for web applications in "API Access"
 
-  Add http://www.google.com/robots.txt as Redirect URI
+  Add `YOUR_REDIRECT_URI` as Redirect URI
 
-  Edit tracker_background.js to set <YOUR_CLIENT_ID> and <YOUR_CLIENT_SECRET> accordingly.
+2) Edit `tracker_background.js` and set `YOUR_CLIENT_ID`, `YOUR_CLIENT_SECRET` and `YOUR_REDIRECT_URI` accordingly.
 
-3) Server-side script
-  The Google+ API needs public URLs for whatever you want to write to History.
-  Since Google Play Music doesn't offer public URLs for song-info I created a small php script.
-  This script takes the song info as parameters and creates the necessary page with schema.org markup.
-  You can host the script on your own server if you want (replacing the URL in tracker_background.js)
-  or use the script that I hosted if you want (URL might change).
+3) Edit `manifest.json` and set `YOUR_REDIRECT_URI` there as well (keep the * at the end)
 
 4) Once everything is set-up you can load the extension as unpacked extension in Chrome.
-  Enable Developer at mode chrome://chrome/extensions/
+  Enable "Developer mode" at chrome://chrome/extensions/
   "Load unpacked extension" and point it to extension folder.
 
 
-Usage
------
+### Usage
+
 You will get a new icon in your browser bar.
-Clicking it will show a pop-up which at first will only show "Authorize"
+Clicking it will show a pop-up which at first will only show "Connect"
 Clicking the first time will redirect you through the Google OAuth flow where you have to give permission to the extension.
-Once authorized (you might have to click Authorize twice on first use) you can click on "Start tracking"
-While playing music on Google Play Music https://play.google.com/music/ the song information will be send to your Google+ History at https://plus.google.com/history
+Once connected you can click on "Start tracking".
+While playing music on Google Play Music https://play.google.com/music/ the song information will be send to your Google App Activities at https://plus.google.com/apps/activities
 
-------------
 
-Copyright 2012 Gerwin Sturm, FoldedSoft e.U. / foldedsoft.at, scarygami.net/+
+### Licenses
+
+```
+Copyright 2012-2013 Gerwin Sturm, FoldedSoft e.U. / foldedsoft.at, scarygami.net/+
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -57,8 +52,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+```
 
-------------
-
-Included is the OAuth2 for Chrome Extensions library by Boris Smus
+Included is a variation of the OAuth2 for Chrome Extensions library by Boris Smus
 https://github.com/borismus/oauth2-extensions/

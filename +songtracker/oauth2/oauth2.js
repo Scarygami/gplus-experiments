@@ -32,10 +32,17 @@ var OAuth2 = function(adapterName, config) {
     } else if (config) {
       that.updateLocalStorage();
 
+      // Make an entry in the adapter lookup table
+      OAuth2.adapterReverse[config.redirectUri] = adapterName;
+      // Store the the adapter lookup table in localStorage
+      localStorage.oauth2_adapterReverse = JSON.stringify(OAuth2.adapterReverse);
+      
       var data = that.get();
-      data.clientId = config.client_id;
-      data.clientSecret = config.client_secret;
-      data.apiScope = config.api_scope;
+      data.clientId = config.clientId;
+      data.clientSecret = config.clientSecret;
+      data.apiScope = config.apiScope;
+      data.requestVisibleActions = config.requestVisibleActions;
+      data.redirectUri = config.redirectUri;
       that.setSource(data);
     }
   });
@@ -72,7 +79,7 @@ OAuth2.prototype.updateLocalStorage = function() {
   var data = {};
   var variables = [
     'accessToken', 'accessTokenDate', 'apiScope', 'clientId', 'clientSecret',
-    'expiresIn', 'refreshToken'
+    'expiresIn', 'refreshToken', 'redirectUri', 'requestVisibleActions'
   ];
   // Check if a variable has already been persisted and then copy them.
   var key;
@@ -324,7 +331,9 @@ OAuth2.prototype.getConfig = function() {
   return {
     clientId: data.clientId,
     clientSecret: data.clientSecret,
-    apiScope: data.apiScope
+    apiScope: data.apiScope,
+    requestVisibleActions: data.requestVisibleActions,
+    redirectUri: data.redirectUri
   };
 };
 
@@ -365,7 +374,7 @@ OAuth2.loadAdapter = function(adapterName, callback) {
  * @throws {String} If the specified adapter is invalid
  */
 OAuth2.adapter = function(name, impl) {
-  var implementing = 'authorizationCodeURL redirectURL accessTokenURL ' +
+  var implementing = 'authorizationCodeURL accessTokenURL ' +
     'accessTokenMethod accessTokenParams accessToken';
 
   // Check for missing methods
@@ -377,10 +386,6 @@ OAuth2.adapter = function(name, impl) {
 
   // Save the adapter in the adapter registry
   OAuth2.adapters[name] = impl;
-  // Make an entry in the adapter lookup table
-  OAuth2.adapterReverse[impl.redirectURL()] = name;
-  // Store the the adapter lookup table in localStorage
-  localStorage.oauth2_adapterReverse = JSON.stringify(OAuth2.adapterReverse);
 };
 
 /**
