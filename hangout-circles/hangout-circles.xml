@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs title="Hangout Circles">
+    <Require feature="rpc"/>
+    <Require feature="views"/>
+  </ModulePrefs>
+  <Content type="html">
+    <![CDATA[
+      <script src="//talkgadget.google.com/hangouts/_/api/hangout.js?v=1.4"></script>
+      <link rel="stylesheet" href="<YOUR PATH>/css/circles.css" />
+      <h2>Hangout Circles</h2>
+      <div id="loading"></div><br><br>
+      <div id="circles"></div>
+
+      <script src="<YOUR PATH>/scripts/circles.js"></script>
+      <script src="https://apis.google.com/js/client.js?onload=onClientReady"></script>
+    ]]>
+  </Content>
+</Module>
