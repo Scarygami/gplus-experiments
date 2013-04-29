@@ -29,12 +29,14 @@ turn this into something great :)
 
 7.  Edit `main.py` and replace `YOUR_CLIENT_ID` with the Client ID you just created
 
-8.  Go to `Hangouts` and put the following URL as `Application URL` replacing
+8.  Deploy the project to App Engine
+
+9.  Go to `Hangouts` and put the following URL as `Application URL` replacing
     `YOUR_APP_ID` with the name of your App Engine project
 
 ```https://hangoutiframer.appspot.com/forward/v0.4?u=https://YOUR_APP_ID.appspot.com/hangout-chat.html```
 
-9.  Save and you are ready to "Enter a hangout!" :)
+10.  Save and you are ready to "Enter a hangout!" :)
 
 
 ### Usage
