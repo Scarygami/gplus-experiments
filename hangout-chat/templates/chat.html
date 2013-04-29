@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hangout Chat</title>
+    <link rel="stylesheet" href="chat.css" />
+    {% if hangout %}
+    <script src="//hangoutsapi.talkgadget.google.com/talkgadget/apps/gadgets/js/rpc.js"></script>
+    <script src="//hangoutsapi.talkgadget.google.com/hangouts/api/hangout.js?v=1.4"></script>
+    {% endif %}
+    <script src="/_ah/channel/jsapi"></script>
+    <script src="chat.js"></script>
+  </head>
+  <body>
+    {% if hangout %}
+    <a href="" id="chatchannel" style="display: none;" target="_blank">External chat channel</a><br>
+    {% else %}
+    <div id="signin">
+      <button class="g-signin"
+        data-scope="https://www.googleapis.com/auth/plus.login"
+        data-clientId="{{ client_id }}"
+        data-callback="onSignInCallback"
+        data-theme="dark"
+        data-cookiepolicy="single_host_origin">
+      </button>
+    </div>
+    {% endif %}
+    <div id="chat" style="display: none">
+      <div id="messages"></div>
+      <div id="input"><input id="new_message"></input></div>
+    </div>
+    {% if not hangout %}
+    <script type="text/javascript">
+      (function(global) {
+        var po, s;
+        po = global.document.createElement('script');
+        po.type = 'text/javascript'; po.async = true;
+        po.src = 'https://plus.google.com/js/client:plusone.js';
+        s = global.document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(po, s);
+      })(this);
+    </script>
+    {% endif %}
+  </body>
+</html>
