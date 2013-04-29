@@ -34,7 +34,9 @@ turn this into something great :)
 9.  Go to `Hangouts` and put the following URL as `Application URL` replacing
     `YOUR_APP_ID` with the name of your App Engine project
 
-```https://hangoutiframer.appspot.com/forward/v0.4?u=https://YOUR_APP_ID.appspot.com/hangout-chat.html```
+```
+https://hangoutiframer.appspot.com/forward/v0.4?u=https://YOUR_APP_ID.appspot.com/hangout-chat.html
+```
 
 10.  Save and you are ready to "Enter a hangout!" :)
 
