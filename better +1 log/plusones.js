@@ -125,13 +125,13 @@
       url = a.href;
       url_parts = url.split("/");
       p = url_parts.indexOf("posts");
-      if (p > 0) {
+      if (p > 0 && p < url_parts.length - 1) {
         userId = url_parts[p - 1];
         getData(userId, function (data) {
           a.innerHTML = "<img src=\"" + data.image.url + "\">";
           if (!!data.activities) {
             for (i = 0; i < data.activities.length; i++) {
-              if (data.activities[i].url.indexOf(url) >= 0) {
+              if (data.activities[i].url.indexOf(url_parts[p - 1] + "/posts/" + url_parts[p + 1]) >= 0) {
                 textDiv = node.querySelector(textSelector);
                 if (!!textDiv) {
                   text = doc.createElement("div");
