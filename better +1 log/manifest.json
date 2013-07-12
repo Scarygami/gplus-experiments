@@ -1,0 +1,22 @@
+{
+  "manifest_version": 2,
+  "name": "Better +1 Log",
+  "version": "0.1.0",
+  "description": "Display actual post content in the activity log at https://plus.google.com/apps/activities",
+  "permissions": [
+    "https://www.googleapis.com/"
+  ],
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "content_security_policy": "script-src 'self'; object-src 'self'",
+  "content_scripts": [
+    {
+      "matches": ["https://plus.google.com/apps/activities*"],
+      "js": ["plusones.js"],
+      "css": [ "style.css" ]
+    }
+  ]
+}
