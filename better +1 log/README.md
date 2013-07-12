@@ -6,19 +6,21 @@ Display actual post content in the activity log at https://plus.google.com/apps/
 
 ### Requirements/Installation
 
-1) Go to Google APIs Console https://code.google.com/apis/console/
+1.  Go to Google APIs Console https://code.google.com/apis/console/
 
-  Create a new project.
+    Create a new project.
+  
+    Activate the Google+ API in `Services`
+    
+    In `API Access` copy the `API key`
 
-  Activate the Google+ API in `Services`
+2.  Edit `plusones.js` and set `YOUR_API_KEY` to the key from the APIs Console.
 
-  In `API Access` copy the `API key`
+3.  Once everything is set-up you can load the extension as unpacked extension in Chrome:
+  
+    Enable "Developer mode" at chrome://chrome/extensions/
 
-2) Edit `plusones.js` and set `YOUR_API_KEY` to the key from the APIs Console.
-
-3) Once everything is set-up you can load the extension as unpacked extension in Chrome.
-  Enable "Developer mode" at chrome://chrome/extensions/
-  "Load unpacked extension" and point it to extension folder.
+    "Load unpacked extension" and point it to extension folder.
 
 
 ### Licenses
