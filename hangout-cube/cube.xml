@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+<!-- Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License
+ -->
+
+  <ModulePrefs title="Hangout Cube">
+    <Require feature="rpc"/>
+    <Require feature="views"/>
+  </ModulePrefs>
+  <Content type="html">
+    <![CDATA[
+    <link rel="stylesheet" type="text/css" href="//www.foldedsoft.at/plus/hangout-cube/css/cube.css">
+    <script src="//plus.google.com/hangouts/_/api/v1/hangout.js"></script>
+    <script src="//www.foldedsoft.at/plus/hangout-cube/scripts/cube.js"></script>
+    <div id="hangout-cube"></div>
+    <script type="text/javascript">
+      gapi.hangout.onApiReady.add(function (event) {
+        if (event.isApiReady) {
+          var cube = new HangoutCube("hangout-cube");
+        }
+      });
+    </script>
+    ]]>
+  </Content>
+</Module>
+
