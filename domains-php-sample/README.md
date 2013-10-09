@@ -18,11 +18,11 @@ in your domain and perform Google+ related tasks on their behalf.
     
     For this example you will need to authorize the following scopes:
     
-```
-https://www.googleapis.com/auth/admin.directory.user.readonly
-https://www.googleapis.com/auth/plus.me
-https://www.googleapis.com/auth/plus.stream.read
-```
+    ```
+    https://www.googleapis.com/auth/admin.directory.user.readonly
+    https://www.googleapis.com/auth/plus.me
+    https://www.googleapis.com/auth/plus.stream.read
+    ```
 
 2.  You also need to authorize API Access for Administrative APIs in `Security / API Reference`
     in your Domain Admin panel to enable the Admin SDK APIs that include the Directory API
