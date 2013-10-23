@@ -18,27 +18,31 @@
   "use strict";
 
   function Songtracker() {
-    var current_tab_id, current_window_id, current_title, current_artist, current_image, current_duration, time_stamp, written, google, access_token, tracking, authorized;
+    var
+      current_tab_id = 0,
+      current_window_id = 0,
+      current_title = "",
+      current_artist = "",
+      current_image = "",
+      current_duration = 0,
+      time_stamp = 0,
+      written = false,
+      tracking = false,
+      authorized = false,
+      token,
+      client_id = "<YOUR_CLIENT_ID>",
+      extension_id = "<YOUR_EXTENSION_ID>",
+      auth_url,
+      that = this;
 
-    current_tab_id = 0;
-    current_window_id = 0;
-    current_title = "";
-    current_artist = "";
-    current_image = "";
-    current_duration = 0;
-    time_stamp = 0;
-    written = false;
-
-    tracking = false;
-    authorized = false;
-
-    google = new global.OAuth2("google", {
-      clientId: "YOUR_CLIENT_ID",
-      clientSecret: "YOUR_CLIENT_SECRET",
-      apiScope: "https://www.googleapis.com/auth/plus.login",
-      requestVisibleActions: "http://schemas.google.com/ListenActivity",
-      redirectUri: "YOUR_REDIRECT_URI"
-    });
+    auth_url =
+      "https://accounts.google.com/o/oauth2/auth" +
+      "?client_id=" + client_id +
+      "&redirect_uri=https%3A%2F%2F" + extension_id + ".chromiumapp.org%2Fcb" +
+      "&response_type=token" +
+      "&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fplus.login" +
+      "&request_visible_actions=http%3A%2F%2Fschemas.google.com%2FListenActivity" +
+      "&cookie_policy=single_host_origin&authuser=0";
 
     this.isAuthorized = function () {
       return authorized;
@@ -48,24 +52,73 @@
       return tracking;
     };
 
-    this.authorize = function (cb) {
-      google.authorize(function () {
-        access_token = google.getAccessToken();
-        if (!access_token) {
-          authorized = false;
-          tracking = false;
-        } else {
-          authorized = true;
+    function parseRedirectUrl(url, state) {
+      var i, part, parts, return_state, access_token, expires_in, token;
+
+      i = url.indexOf("#");
+      if (i >= 0) {
+        parts = url.substring(i + 1).split("&");
+        for (i = 0; i < parts.length; i++) {
+          part = parts[i].split("=");
+          if (part.length === 2) {
+            if (part[0] === "state") {
+              return_state = part[1];
+            }
+            if (part[0] === "access_token") {
+              access_token = part[1];
+            }
+            if (part[0] === "expires_in") {
+              expires_in = part[1];
+            }
+          }
         }
-        try { cb(authorized); } catch (e) { global.console.log("Error calling callback"); }
-      });
+        if (!!return_state && !!access_token && !!expires_in) {
+          if (state === return_state) {
+            token = {
+              "access_token": access_token,
+              "expiry": (new Date()).getTime() + expires_in * 1000
+            };
+            global.console.log(token);
+            return token;
+          }
+        }
+      }
+    }
+
+    this.authorize = function (immediate, cb) {
+      var state;
+
+      if (!!token && token.expiry > (new Date()).getTime()) {
+        // we still have a valid token, return immediatly
+        cb(token);
+        return;
+      }
+
+      // no valid token available, request a new one
+      token = undefined;
+      state = Math.random().toString(36);
+      global.chrome.identity.launchWebAuthFlow(
+        {"url": auth_url + "&state=" + state, "interactive": !immediate},
+        function (redirect_url) {
+          token = parseRedirectUrl(redirect_url, state);
+          if (!token) {
+            authorized = false;
+            tracking = false;
+          } else {
+            authorized = true;
+          }
+          if (!!cb) {
+            try { cb(token); } catch (e) { global.console.log("Error calling callback"); }
+          }
+        }
+      );
     };
 
     function createNotification(text, title, image, no_timeout) {
       var notification;
       notification = global.webkitNotifications.createNotification(
         image || global.chrome.extension.getURL("icon48.png"),
-        title || "Song added to Google+ history",
+        title || "Song added to Google+ Activity Log",
         text
       );
       notification.show();
@@ -76,13 +129,14 @@
 
     this.deauthorize = function (cb) {
       var xhr;
+
       tracking = false;
 
-      access_token = google.getAccessToken();
-      if (!access_token) {
-        google.clearAccessToken();
+      if (!token) {
         authorized = false;
-        try { cb(); } catch (e) { global.console.log("Error calling callback"); }
+        if (!!cb) {
+          try { cb(); } catch (e) { global.console.log("Error calling callback"); }
+        }
         return;
       }
 
@@ -96,23 +150,28 @@
           } else {
             createNotification("Please visit plus.google.com/apps to disconnect the application manually.", "Error disconnecting", undefined, true);
           }
+          token = undefined;
+          authorized = false;
+          if (!!cb) {
+            try { cb(); } catch (e) { global.console.log("Error calling callback"); }
+          }
         }
-        google.clearAccessToken();
-        access_token = undefined;
-        authorized = false;
-        try { cb(); } catch (e) { global.console.log("Error calling callback"); }
       };
 
-      xhr.open("GET", "https://accounts.google.com/o/oauth2/revoke?token=" + access_token, true);
+      xhr.open("GET", "https://accounts.google.com/o/oauth2/revoke?token=" + token.access_token, true);
       xhr.send();
     };
 
+
     this.startTracking = function (cb) {
-      google.authorize(function () {
-        access_token = google.getAccessToken();
-        authorized = true;
-        tracking = true;
-        try { cb(); } catch (e) { global.console.log("Error calling callback"); }
+      // Check if token is valid and refresh if necessary
+      this.authorize(true, function () {
+        if (!!token) {
+          tracking = true;
+          if (!!cb) {
+            try { cb(); } catch (e) { global.console.log("Error calling callback"); }
+          }
+        }
       });
     };
 
@@ -138,7 +197,10 @@
             }
             createNotification(text, undefined, response.target.image);
           } else {
-            createNotification("Error " + xhr.status + ": " + xhr.statusText, "Error adding song to Google+ History");
+            createNotification("Error adding song to Google+ Activity Log. Please try signing in again.", "Error " + xhr.status + ": " + xhr.statusText);
+            tracking = false;
+            authorized = false;
+            token = undefined;
           }
         }
       };
@@ -146,7 +208,7 @@
       xhr.open("POST", "https://www.googleapis.com/plus/v1/people/me/moments/vault?debug=true", true);
 
       xhr.setRequestHeader("Content-Type", "application/json");
-      xhr.setRequestHeader("Authorization", "OAuth " + access_token);
+      xhr.setRequestHeader("Authorization", "Bearer " + token.access_token);
 
       xhr.send(message);
     }
@@ -175,24 +237,24 @@
               if (write && !written) {
                 written = true;
 
-                // make sure we have a valid token before trying to submit anything
-                google.authorize(function () {
-                  access_token = google.getAccessToken();
-                  authorized = true;
-                  writeMoment({
-                    "type": "http://schemas.google.com/ListenActivity",
-                    "target": {
-                      "id": (current_title + " by " + current_artist).replace(/\W/gi, "_"),
-                      "type": "http://schema.org/MusicRecording",
-                      "name": current_title,
-                      "description": current_title + " by " + current_artist,
-                      "image": current_image,
-                      "byArtist": {
-                        "type": "http://schema.org/MusicGroup",
-                        "name": current_artist
+                // Check if access_token is valid and refresh if necessary
+                that.authorize(true, function () {
+                  if (!!token) {
+                    writeMoment({
+                      "type": "http://schemas.google.com/ListenActivity",
+                      "target": {
+                        "id": (current_title + " by " + current_artist).replace(/\W/gi, "_"),
+                        "type": "http://schema.org/MusicRecording",
+                        "name": current_title,
+                        "description": current_title + " by " + current_artist,
+                        "image": current_image,
+                        "byArtist": {
+                          "type": "http://schema.org/MusicGroup",
+                          "name": current_artist
+                        }
                       }
-                    }
-                  });
+                    });
+                  }
                 });
               }
             }

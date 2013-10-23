@@ -36,7 +36,7 @@
         button_tracking_label.innerHTML = "Start tracking";
       }
     } else {
-      button_authorize_label.innerHTML = "Connect";
+      button_authorize_label.innerHTML = "Sign-in with Google";
       button_tracking.style.display = "none";
       button_tracking_label.innerHTML = "Start tracking";
     }
@@ -63,7 +63,7 @@
           button_tracking_label.innerHTML = "Start tracking";
         });
       } else {
-        background.songtracker.authorize(function () {
+        background.songtracker.authorize(false, function () {
           if (background.songtracker.isAuthorized()) {
             button_authorize_label.innerHTML = "Disconnect";
             button_tracking.style.display = "inline-block";

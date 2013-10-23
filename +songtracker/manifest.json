@@ -4,9 +4,10 @@
   "version": "1.0.0",
   "description": "Keeping track of what you listen on Google Music",
   "permissions": [
+    "identity",
     "notifications",
-    "https://accounts.google.com/o/oauth2/token",
-    "https://www.googleapis.com/"
+    "https://www.googleapis.com/",
+    "https://accounts.google.com/o/oauth2/"
   ],
   "icons": {
     "16": "icon16.png",
@@ -18,15 +19,10 @@
     {
       "matches": ["https://play.google.com/music/*"],
       "js": ["tracker_content.js"]
-    },
-    {
-      "matches": ["YOUR_REDIRECT_URI*"],
-      "js": ["oauth2/oauth2_inject.js"],
-        "run_at": "document_start"
     }
   ],
   "background": {
-    "page": "tracker_background.html"
+    "scripts": ["tracker_background.js"]
   },
   "browser_action": {
     "default_icon": "icon19.png",
