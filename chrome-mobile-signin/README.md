@@ -6,27 +6,27 @@ Minimal sample to show how to use the Chrome Identity API in Mobile Chrome Apps
 
 ### Setup/Installation
 
-1  Setup the development tools following the [official instructions here](https://github.com/MobileChromeApps/mobile-chrome-apps/blob/master/docs/Installation.md) 
+1.  Setup the development tools following the [official instructions here](https://github.com/MobileChromeApps/mobile-chrome-apps/blob/master/docs/Installation.md) 
 
-2  Run `cca create YourApp --copy-from=path/to/chrome-mobile-signin/manifest.json`
+2.  Run `cca create YourApp --copy-from=path/to/chrome-mobile-signin/manifest.json`
 
    This will copy the source code to a new folder `YourApp/www` and prepare everything for porting it to mobile
    
-3  Edit `YourApp/www/manifest.mobile.json` to change the `packageId` to whatever you want.
+3.  Edit `YourApp/www/manifest.mobile.json` to change the `packageId` to whatever you want.
 
-4  Create a new project in the [Google Developers Console](https://cloud.google.com/console/project)
+4.  Create a new project in the [Google Developers Console](https://cloud.google.com/console/project)
 
-5  Activate the `Google+ API` in `APIs & Auth`
+5.  Activate the `Google+ API` in `APIs & Auth`
 
-6  In credentials create a new Client ID for Installed Application -> Android
+6.  In credentials create a new Client ID for Installed Application -> Android
 
-   For this you will need the `packageId` you defined earlier as well as SHA-1 fingerprint of your signing certificate (for now the debug keystore will suffice).
+   For this you will need the `packageId` you defined earlier as well as the SHA-1 fingerprint of your signing certificate (for now the debug keystore will suffice).
    
    See [Google Developers Console Docs](https://developers.google.com/console/help/new/#installedapplications) for details and instructions.
    
-7  Edit `YourApp/www/manifest.json` to add the Client ID you just created.
+7.  Edit `YourApp/www/manifest.json` to add the Client ID you just created.
 
-8  Run `cca prepare` and then to test the application `cca run android` (connected device) or `cca emulate android` (Android emulator)
+8.  Run `cca prepare` and then to test the application `cca run android` (connected device) or `cca emulate android` (Android emulator)
 
    
 ### Licenses
