@@ -16,9 +16,9 @@ Minimal sample to show how to use the Chrome Identity API in Mobile Chrome Apps
 
 4.  Create a new project in the [Google Developers Console](https://cloud.google.com/console/project)
 
-5.  Activate the `Google+ API` in `APIs & Auth`
+5.  Activate the `Google+ API` in "APIs & Auth"
 
-6.  In credentials create a new Client ID for Installed Application -> Android
+6.  In "Credentials" create a new Client ID for "Installed Application" > "Android"
 
    For this you will need the `packageId` you defined earlier as well as the SHA-1 fingerprint of your signing certificate (for now the debug keystore will suffice).
    
