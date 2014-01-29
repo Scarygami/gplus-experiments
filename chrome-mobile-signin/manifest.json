@@ -1,0 +1,35 @@
+{
+  "name": "Chrome Mobile Sign-In",
+  "description": "Minimal sample to show how to use the Chrome Identity API in Mobile Chrome Apps",
+  "manifest_version": 2,
+  "minimum_chrome_version": "23",
+  "version": "0.0.1",
+  "icons": {
+    "16": "assets/icons/icon16.png",
+    "36": "assets/icons/icon36.png",
+    "48": "assets/icons/icon48.png",
+    "57": "assets/icons/icon57.png",
+    "72": "assets/icons/icon72.png",
+    "96": "assets/icons/icon96.png",
+    "114": "assets/icons/icon114.png",
+    "128": "assets/icons/icon128.png",
+    "144": "assets/icons/icon144.png"
+  },
+  "app": {
+    "background": {
+      "scripts": ["background.js"]
+    }
+  },
+  "permissions": [
+    "identity",
+    "https://accounts.google.com/*",
+    "https://www.googleapis.com/*",
+    "https://*.googleusercontent.com/*"
+  ],
+  "oauth2": {
+    "client_id": "<YOUR-CLIENT_ID>",
+    "scopes": [
+      "https://www.googleapis.com/auth/plus.login"
+    ]
+  }
+}

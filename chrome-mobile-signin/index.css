@@ -1,0 +1,70 @@
+html {
+  height: 100%;
+}
+
+body {
+  box-shadow: 0 0 50px #ddd inset;
+  -webkit-box-shadow: 0 0 50px #ddd inset;
+  font-family: 'Roboto', OpenSans, Helvetica, Arial, sans;
+  height: 100%;
+  margin: 0;
+  text-align: center;
+  overflow: auto;
+}
+
+img.header {
+  margin: 50px auto;
+}
+
+.signin {
+  display: inline-block;
+  background: #dd4b39;
+  color: white;
+  border-radius: 5px;
+  white-space: nowrap;
+}
+
+.signout {
+  display: inline-block;
+  background: #999;
+  color: white;
+  border-radius: 5px;
+  white-space: nowrap;
+}
+  
+.signin .icon {
+  background: url('assets/btn_red_32.png') transparent 5px 50% no-repeat;
+  display: inline-block;
+  vertical-align: middle;
+  width: 40px;
+  height: 35px;
+  border-right: #bb3f30 1px solid;
+}
+
+.signout .icon {
+  display: inline-block;
+  vertical-align: middle;
+  height: 35px;
+}
+
+.label {
+  display: inline-block;
+  vertical-align: middle;
+  padding-left: 35px;
+  padding-right: 35px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.user {
+  margin-bottom: 50px;
+}
+
+.user img {
+  border-radius: 50%;
+  vertical-align: middle;
+}
+
+.user span {
+  font-weight: bold;
+}
